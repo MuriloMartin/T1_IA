@@ -10,7 +10,7 @@ heuristic = createDistanceMatrix(weightMatrix)
 start = 0
 goal = 61
 
-shortest = a_starV2(adjMatrix,heuristic,start,goal)
+shortest = a_star(adjMatrix,heuristic,start,goal)
 
 print(shortest)
 
