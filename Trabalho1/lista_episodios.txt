@@ -1,0 +1,28 @@
+1	1	"The Night of No Tomorrow"	Helix
+2	2	"The Eye of the Beholder"	Valley of the Beholder
+3	3	"The Hall of Bones"	Hall of Bones
+4	4	"Valley of the Unicorns"	Valley of the Unicorns
+5	5	"In Search of the Dungeon Master"	Slavemindes of Baltimore
+6	6	"Beauty and the Bogbeast"	Swap of Sorrows
+7	7	"Prison Without Walls"	Prison of Agony
+8	8	"Servant of Evil"	Valley of the Bogbeasts
+9	9	"Quest of the Skeleton Warrior"	Tower of the Celestial Knights
+B	10	"The Garden of Zinn"	City of Zinn
+C	11	"The Box"	Skull Montain
+E	12	"The Lost Children"	Forest of the Lost Children
+G	13	"P-R-E-S-T-O Spells Disaster"	Floating Island
+H	14	"The Girl Who Dreamed Tomorrow"	The maze of Darkness
+I	15	"The Treasure of Tardos"	Tardos Keep
+J	16	"City at the Edge of Midnight"	Oasis of no Return
+K	17	"The Traitor"	Cloud Forest
+L	18	"Day of the Dungeon Master"	Darkhaven
+N	19	"The Last Illusion"	Forbidden Tower
+O	20	"The Dragon's Graveyard"	Great Glaciers
+P	21	"Child of the Stargazer"	City of Turodh
+Q	22	"The Dungeon at the Heart of Dawn"	Tower of Darkness
+S	23	"Citadel of Shadow"	Citadel of Shadow
+T	24	"Odyssey of the Twelfth Talisman"	Tower of Chronos
+U	25	"The Time Lost"	Human Tribes
+W	26	"The Winds of Darkness"	Grotto of Darkness
+Y	27	"Cave of the Fairie Dragons"	Cave of the Fairy Dragons
+Z	28	"The Forgotten Tomb"	Abyss
