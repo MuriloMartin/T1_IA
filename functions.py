@@ -9,6 +9,20 @@ def FileToWeightMatrix(file):
         if char == '\n':
             adjMatrix.append(auxArray)
             auxArray = [] 
+        elif char==".":
+            auxArray.append("1")
+        elif char=="R":
+            auxArray.append("5")
+        elif char=="D":
+            auxArray.append("10")
+        elif char=="F" or char =="f":
+            auxArray.append("15")
+        elif char=="A":
+            auxArray.append("20")
+        elif char=="M":
+            auxArray.append("100")
+        elif char=="B" or char=="b" or char=="C" or char=="E" or char=="G"or char=="H"or char=="I"or char=="J"or char=="K"or char=="L"or char=="N"or char=="O"or char=="P"or char=="Q"or char=="S"or char=="T"or char=="U"or char=="W"or char=="Y"or char=="Z":
+            auxArray.append("0")
         else:       
             auxArray.append(char)
         if not char:
@@ -16,8 +30,6 @@ def FileToWeightMatrix(file):
     file.close()
     return adjMatrix
 
-def ConvertCharToWeight(adjMatrix):
-    return adjMatrix
 
 
 def createGraph(weightMatrix):

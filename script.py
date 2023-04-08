@@ -1,11 +1,16 @@
 from functions import *
 
 
-weightMatrix = FileToWeightMatrix('testeAlgo.txt')
+#weightMatrix = FileToWeightMatrix('testeAlgo.txt')
+#adjMatrix = createGraph(weightMatrix)
+#heuristic = createDistanceMatrix(weightMatrix)
+
+weightMatrix = FileToWeightMatrix('caverna_dragao_v2.txt')
 adjMatrix = createGraph(weightMatrix)
 heuristic = createDistanceMatrix(weightMatrix)
-
-#print(heuristic)
+#converted = ConvertCharToWeight(weightMatrix)
+#print(converted)
+#print(weightMatrix)
 
 start = 0
 goal = 61
