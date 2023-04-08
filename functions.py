@@ -4,6 +4,8 @@ def FileToWeightMatrix(file):
     file = open(file, 'r')
     adjMatrix = []
     auxArray = []
+    no=0
+    dicionario={}
     while 1:
         char = file.read(1)
         if char == '\n':
@@ -11,23 +13,75 @@ def FileToWeightMatrix(file):
             auxArray = [] 
         elif char==".":
             auxArray.append("1")
+            no+=1
+            dicionario["."] = no
         elif char=="R":
             auxArray.append("5")
+            no+=1
+            dicionario["R"] = no
         elif char=="D":
             auxArray.append("10")
+            no+=1
+            dicionario["D"] = no
         elif char=="F" or char =="f":
             auxArray.append("15")
+            no+=1
+            dicionario["F"] = no
         elif char=="A":
             auxArray.append("20")
+            no+=1
+            dicionario["A"] = no
         elif char=="M":
             auxArray.append("100")
+            no+=1
+            dicionario["M"] = no
         elif char=="B" or char=="b" or char=="C" or char=="E" or char=="G"or char=="H"or char=="I"or char=="J"or char=="K"or char=="L"or char=="N"or char=="O"or char=="P"or char=="Q"or char=="S"or char=="T"or char=="U"or char=="W"or char=="Y"or char=="Z":
+            no+=1
+            match char:
+                case "B":
+                    dicionario["B"] = no
+                case "E":
+                    dicionario["E"] = no
+                case "G":
+                    dicionario["G"] = no
+                case "H":
+                    dicionario["H"] = no
+                case "I":
+                    dicionario["I"] = no
+                case "J":
+                    dicionario["J"] = no
+                case "K":
+                    dicionario["K"] = no
+                case "L":
+                    dicionario["L"] = no
+                case "N":
+                    dicionario["N"] = no
+                case "O":
+                    dicionario["O"] = no
+                case "P":
+                    dicionario["P"] = no
+                case "Q":
+                    dicionario["Q"] = no
+                case "S":
+                    dicionario["S"] = no
+                case "T":
+                    dicionario["T"] = no
+                case "U":
+                    dicionario["U"] = no
+                case "Y":
+                    dicionario["Y"] = no
+                case "Z":
+                    dicionario["Z"] = no
+                case "b":
+                    dicionario["b"] = no
+
             auxArray.append("0")
         else:       
             auxArray.append(char)
         if not char:
             break
     file.close()
+    print(dicionario)
     return adjMatrix
 
 
