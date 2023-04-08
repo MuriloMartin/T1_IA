@@ -1,88 +1,100 @@
 import numpy as np
 
-def FileToWeightMatrix(file):
+def readFile(file):
     file = open(file, 'r')
-    adjMatrix = []
+    map = []
     auxArray = []
-    no=0
-    dicionario={}
+    nodeCounter=0
+    eventsDict={}
     while 1:
         char = file.read(1)
         if char == '\n':
-            adjMatrix.append(auxArray)
+            map.append(auxArray)
             auxArray = [] 
         elif char==".":
             auxArray.append("1")
-            no+=1
-            dicionario["."] = no
+            nodeCounter+=1
         elif char=="R":
             auxArray.append("5")
-            no+=1
-            dicionario["R"] = no
+            nodeCounter+=1
         elif char=="D":
             auxArray.append("10")
-            no+=1
-            dicionario["D"] = no
+            nodeCounter+=1
         elif char=="F" or char =="f":
             auxArray.append("15")
-            no+=1
-            dicionario["F"] = no
+            nodeCounter+=1
         elif char=="A":
             auxArray.append("20")
-            no+=1
-            dicionario["A"] = no
+            nodeCounter+=1
         elif char=="M":
             auxArray.append("100")
-            no+=1
-            dicionario["M"] = no
-        elif char=="B" or char=="b" or char=="C" or char=="E" or char=="G"or char=="H"or char=="I"or char=="J"or char=="K"or char=="L"or char=="N"or char=="O"or char=="P"or char=="Q"or char=="S"or char=="T"or char=="U"or char=="W"or char=="Y"or char=="Z":
-            no+=1
+            nodeCounter+=1
+        elif char:
             match char:
+                case "1":
+                    eventsDict[1] = {'node': nodeCounter, 'label': 'Helix'}
+                case "2":
+                    eventsDict[2] = {'node': nodeCounter, 'label': 'Valley of the Beholder'}
+                case "3":
+                    eventsDict[3] =  {'node': nodeCounter, 'label': 'Hall of Bones'}
+                case "4":
+                    eventsDict[4] = {'node': nodeCounter, 'label': 'Valley of the Unicorns'}
+                case "5":
+                    eventsDict[5] = {'node': nodeCounter, 'label': 'Slavemindes of Baltimore'}
+                case "6":
+                    eventsDict[6] = {'node': nodeCounter, 'label': 'Swap of Sorrows'}
+                case "7":
+                    eventsDict[7] = {'node': nodeCounter, 'label': 'Prison of Agony'}
+                case "8":
+                    eventsDict[8] = {'node': nodeCounter, 'label': 'Valley of the Bogbeasts'}
+                case "9":
+                    eventsDict[9] = {'node': nodeCounter, 'label': 'Tower of the Celestial Knights'}
                 case "B":
-                    dicionario["B"] = no
+                    eventsDict[10] = {'node': nodeCounter, 'label': 'City of Zinn'}
+                case "C":
+                    eventsDict[11] = {'node': nodeCounter, 'label': 'Skull Montain'}
                 case "E":
-                    dicionario["E"] = no
+                    eventsDict[12] = {'node': nodeCounter, 'label': 'Forest of the Lost Children'}
                 case "G":
-                    dicionario["G"] = no
+                    eventsDict[13] = {'node': nodeCounter, 'label': 'Disaster"	Floating Island'}
                 case "H":
-                    dicionario["H"] = no
+                    eventsDict[14] = {'node': nodeCounter, 'label': 'The maze of Darkness'}
                 case "I":
-                    dicionario["I"] = no
+                    eventsDict[15] = {'node': nodeCounter, 'label': 'Tardos Keep'}
                 case "J":
-                    dicionario["J"] = no
+                    eventsDict[16] = {'node': nodeCounter, 'label': 'Oasis of no Return'}
                 case "K":
-                    dicionario["K"] = no
+                    eventsDict[17] = {'node': nodeCounter, 'label': 'Cloud Forest'}
                 case "L":
-                    dicionario["L"] = no
+                    eventsDict[18] = {'node': nodeCounter, 'label': 'Darkhaven'}
                 case "N":
-                    dicionario["N"] = no
+                    eventsDict[19] = {'node': nodeCounter, 'label': 'Forbidden Tower'}
                 case "O":
-                    dicionario["O"] = no
+                    eventsDict[20] = {'node': nodeCounter, 'label': 'Great Glaciers'}
                 case "P":
-                    dicionario["P"] = no
+                    eventsDict[21] = {'node': nodeCounter, 'label': 'City of Turodh'}
                 case "Q":
-                    dicionario["Q"] = no
+                    eventsDict[22] = {'node': nodeCounter, 'label': 'Tower of Darkness'}
                 case "S":
-                    dicionario["S"] = no
+                    eventsDict[23] = {'node': nodeCounter, 'label': 'Citadel of Shadow'}
                 case "T":
-                    dicionario["T"] = no
+                    eventsDict[24] = {'node': nodeCounter, 'label': 'Tower of Chronos'}
                 case "U":
-                    dicionario["U"] = no
+                    eventsDict[25] = {'node': nodeCounter, 'label': 'Human Tribes'}
+                case "W":
+                    eventsDict[26] = {'node': nodeCounter, 'label': 'Grotto of Darkness'}
                 case "Y":
-                    dicionario["Y"] = no
+                    eventsDict[27] = {'node': nodeCounter, 'label': 'Cave of the Fairy Dragons'}
                 case "Z":
-                    dicionario["Z"] = no
-                case "b":
-                    dicionario["b"] = no
-
+                    eventsDict[28] = {'node': nodeCounter, 'label': 'Abyss'}
+                case "_":
+                    print('Erro ao determinar o evento')
             auxArray.append("0")
-        else:       
-            auxArray.append(char)
+            nodeCounter += 1
         if not char:
             break
     file.close()
-    print(dicionario)
-    return adjMatrix
+    return (map,eventsDict)
 
 
 
