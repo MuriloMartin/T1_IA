@@ -1,4 +1,5 @@
 import numpy as np
+import time as time
 
 def readFile(file):
     file = open(file, 'r')
@@ -89,7 +90,7 @@ def readFile(file):
                     eventsDict[28] = {'node': nodeCounter, 'label': 'Abyss'}
                 case "_":
                     print('Erro ao determinar o evento')
-            auxArray.append("0")
+            auxArray.append("1")
             nodeCounter += 1
         if not char:
             break
@@ -116,6 +117,7 @@ def createGraph(weightMatrix):
     return adjMatrix
 
 def createDistanceMatrix(matrix):
+    startTime = time.time()
     matrixHeight = len(matrix)
     matrixWidht = len(matrix[0])
     heuristic = []
@@ -129,7 +131,7 @@ def createDistanceMatrix(matrix):
                     distance = abs(currentNode[0]-probedNode[0]) + abs(currentNode[1]-probedNode[1])
                     auxArray.append(distance) 
             heuristic.append(auxArray)
-    
+    print('Tempo de execução da função createDistanceMatrix: ', time.time()-startTime)
     return heuristic
 
 
@@ -207,7 +209,6 @@ def a_star(graph, heuristic, start, goal):
 
     # start node has a priority equal to straight line distance to goal. It will be the first to be expanded.
     priorities[start] = heuristic[start][goal]
-
     # This contains whether a node was already visited
     visited = [False] * len(graph)
 
