@@ -1,5 +1,136 @@
 import numpy as np
 import time as time
+import random
+
+#Individual class
+class Individual:
+    def __init__(self):
+        self.fitness = 0
+        self.genes = [0]*5
+        self.geneLength = 5
+        
+        #Set genes randomly for each individual
+        for i in range(len(self.genes)):
+            self.genes[i] = abs(random.randint(0,1))
+
+        self.calcFitness()
+
+    #Calculate fitness
+    def calcFitness(self):
+        self.fitness = 0
+        for i in range(self.geneLength):
+            if self.genes[i] == 1:
+                self.fitness += 1
+
+#Population class
+class Population:
+    def __init__(self):
+        self.popSize = 10
+        self.individuals = [None]*self.popSize
+        self.fittest = 0
+
+    #Initialize population
+    def initializePopulation(self):
+        for i in range(len(self.individuals)):
+            self.individuals[i] = Individual()
+
+    #Get the fittest individual
+    def getFittest(self):
+        maxFit = float('-inf')
+        maxFitIndex = 0
+        for i in range(len(self.individuals)):
+            if maxFit <= self.individuals[i].fitness:
+                maxFit = self.individuals[i].fitness
+                maxFitIndex = i
+        self.fittest = self.individuals[maxFitIndex].fitness
+        return self.individuals[maxFitIndex]
+
+    #Get the second most fittest individual
+    def getSecondFittest(self):
+        maxFit1 = 0
+        maxFit2 = 0
+        for i in range(len(self.individuals)):
+            if self.individuals[i].fitness > self.individuals[maxFit1].fitness:
+                maxFit2 = maxFit1
+                maxFit1 = i
+            elif self.individuals[i].fitness > self.individuals[maxFit2].fitness:
+                maxFit2 = i
+        return self.individuals[maxFit2]
+
+    #Get index of least fittest individual
+    def getLeastFittestIndex(self):
+        minFitVal = float('inf')
+        minFitIndex = 0
+        for i in range(len(self.individuals)):
+            if minFitVal >= self.individuals[i].fitness:
+                minFitVal = self.individuals[i].fitness
+                minFitIndex = i
+        return minFitIndex
+
+    #Calculate fitness of each individual
+    def calculateFitness(self):
+        for i in range(len(self.individuals)):
+            self.individuals[i].calcFitness()
+
+#Main class
+class SimpleDemoGA:
+    def __init__(self):
+        self.population = Population()
+        self.fittest = None
+        self.secondFittest = None
+        self.generationCount = 0
+
+    def selection(self):
+        #Select the most fittest individual
+        self.fittest = self.population.getFittest()
+
+        #Select the second most fittest individual
+        self.secondFittest = self.population.getSecondFittest()
+
+    def crossover(self):
+        #Select a random crossover point
+        crossOverPoint = random.randint(0, self.population.individuals[0].geneLength-1)
+
+        #Swap values among parents
+        for i in range(crossOverPoint):
+            temp = self.fittest.genes[i]
+            self.fittest.genes[i] = self.secondFittest.genes[i]
+            self.secondFittest.genes[i] = temp
+    
+    def mutation(self):
+        # Select a random mutation point
+        mutationPoint = random.randint(0, len(self.population.individuals[0].genes) - 1)
+
+        # Flip values at the mutation point
+        if self.fittest.genes[mutationPoint] == 0:
+            self.fittest.genes[mutationPoint] = 1
+        else:
+            self.fittest.genes[mutationPoint] = 0
+
+        mutationPoint = random.randint(0, len(self.population.individuals[0].genes) - 1)
+
+        if self.secondFittest.genes[mutationPoint] == 0:
+            self.secondFittest.genes[mutationPoint] = 1
+        else:
+            self.secondFittest.genes[mutationPoint] = 0
+
+    # Get fittest offspring
+    def getFittestOffspring(self):
+        if self.fittest.fitness > self.secondFittest.fitness:
+            return self.fittest
+        return self.secondFittest
+
+    # Replace least fittest individual from most fittest offspring
+    def addFittestOffspring(self):
+        # Update fitness values of offspring
+        self.fittest.calcFitness()
+        self.secondFittest.calcFitness()
+
+        # Get index of least fit individual
+        self.leastFittestIndex = self.population.getLeastFittestIndex()
+
+        # Replace least fittest individual from most fittest offspring
+        self.population.individuals[self.leastFittestIndex] = self.getFittestOffspring()
 
 def readFile(file):
     file = open(file, 'r')
@@ -33,61 +164,61 @@ def readFile(file):
         elif char:
             match char:
                 case "1":
-                    eventsDict[1] = {'node': nodeCounter, 'label': 'Helix'}
+                    eventsDict[1] = {'node': nodeCounter, 'label': 'Helix', 'stage':'1', 'difficulty':'10'}
                 case "2":
-                    eventsDict[2] = {'node': nodeCounter, 'label': 'Valley of the Beholder'}
+                    eventsDict[2] = {'node': nodeCounter, 'label': 'Valley of the Beholder','stage':'2', 'difficulty':'20'}
                 case "3":
-                    eventsDict[3] =  {'node': nodeCounter, 'label': 'Hall of Bones'}
+                    eventsDict[3] =  {'node': nodeCounter, 'label': 'Hall of Bones', 'stage':'3', 'difficulty':'30'}
                 case "4":
-                    eventsDict[4] = {'node': nodeCounter, 'label': 'Valley of the Unicorns'}
+                    eventsDict[4] = {'node': nodeCounter, 'label': 'Valley of the Unicorns', 'stage':'4', 'difficulty':'60'}
                 case "5":
-                    eventsDict[5] = {'node': nodeCounter, 'label': 'Slavemindes of Baltimore'}
+                    eventsDict[5] = {'node': nodeCounter, 'label': 'Slavemindes of Baltimore', 'stage':'5', 'difficulty':'65'}
                 case "6":
-                    eventsDict[6] = {'node': nodeCounter, 'label': 'Swap of Sorrows'}
+                    eventsDict[6] = {'node': nodeCounter, 'label': 'Swap of Sorrows', 'stage':'6', 'difficulty':'70'}
                 case "7":
-                    eventsDict[7] = {'node': nodeCounter, 'label': 'Prison of Agony'}
+                    eventsDict[7] = {'node': nodeCounter, 'label': 'Prison of Agony', 'stage':'7', 'difficulty':'75'}
                 case "8":
-                    eventsDict[8] = {'node': nodeCounter, 'label': 'Valley of the Bogbeasts'}
+                    eventsDict[8] = {'node': nodeCounter, 'label': 'Valley of the Bogbeasts', 'stage':'8', 'difficulty':'80'}
                 case "9":
-                    eventsDict[9] = {'node': nodeCounter, 'label': 'Tower of the Celestial Knights'}
+                    eventsDict[9] = {'node': nodeCounter, 'label': 'Tower of the Celestial Knights', 'stage':'9', 'difficulty':'85'}
                 case "B":
-                    eventsDict[10] = {'node': nodeCounter, 'label': 'City of Zinn'}
+                    eventsDict[10] = {'node': nodeCounter, 'label': 'City of Zinn', 'stage':'B', 'difficulty':'90'}
                 case "C":
-                    eventsDict[11] = {'node': nodeCounter, 'label': 'Skull Montain'}
+                    eventsDict[11] = {'node': nodeCounter, 'label': 'Skull Montain', 'stage':'C', 'difficulty':'95'}
                 case "E":
-                    eventsDict[12] = {'node': nodeCounter, 'label': 'Forest of the Lost Children'}
+                    eventsDict[12] = {'node': nodeCounter, 'label': 'Forest of the Lost Children', 'stage':'E', 'difficulty':'100'}
                 case "G":
-                    eventsDict[13] = {'node': nodeCounter, 'label': 'Disaster"	Floating Island'}
+                    eventsDict[13] = {'node': nodeCounter, 'label': 'Disaster"	Floating Island', 'stage':'G', 'difficulty':'110'}
                 case "H":
-                    eventsDict[14] = {'node': nodeCounter, 'label': 'The maze of Darkness'}
+                    eventsDict[14] = {'node': nodeCounter, 'label': 'The maze of Darkness', 'stage':'H', 'difficulty':'120'}
                 case "I":
-                    eventsDict[15] = {'node': nodeCounter, 'label': 'Tardos Keep'}
+                    eventsDict[15] = {'node': nodeCounter, 'label': 'Tardos Keep', 'stage':'I', 'difficulty':'130'}
                 case "J":
-                    eventsDict[16] = {'node': nodeCounter, 'label': 'Oasis of no Return'}
+                    eventsDict[16] = {'node': nodeCounter, 'label': 'Oasis of no Return', 'stage':'J', 'difficulty':'140'}
                 case "K":
-                    eventsDict[17] = {'node': nodeCounter, 'label': 'Cloud Forest'}
+                    eventsDict[17] = {'node': nodeCounter, 'label': 'Cloud Forest', 'stage':'K', 'difficulty':'150'}
                 case "L":
-                    eventsDict[18] = {'node': nodeCounter, 'label': 'Darkhaven'}
+                    eventsDict[18] = {'node': nodeCounter, 'label': 'Darkhaven', 'stage':'L', 'difficulty':'160'}
                 case "N":
-                    eventsDict[19] = {'node': nodeCounter, 'label': 'Forbidden Tower'}
+                    eventsDict[19] = {'node': nodeCounter, 'label': 'Forbidden Tower', 'stage':'N', 'difficulty':'170'}
                 case "O":
-                    eventsDict[20] = {'node': nodeCounter, 'label': 'Great Glaciers'}
+                    eventsDict[20] = {'node': nodeCounter, 'label': 'Great Glaciers', 'stage':'O', 'difficulty':'180'}
                 case "P":
-                    eventsDict[21] = {'node': nodeCounter, 'label': 'City of Turodh'}
+                    eventsDict[21] = {'node': nodeCounter, 'label': 'City of Turodh', 'stage':'P', 'difficulty':'190'}
                 case "Q":
-                    eventsDict[22] = {'node': nodeCounter, 'label': 'Tower of Darkness'}
+                    eventsDict[22] = {'node': nodeCounter, 'label': 'Tower of Darkness', 'stage':'Q', 'difficulty':'200'}
                 case "S":
-                    eventsDict[23] = {'node': nodeCounter, 'label': 'Citadel of Shadow'}
+                    eventsDict[23] = {'node': nodeCounter, 'label': 'Citadel of Shadow', 'stage':'S', 'difficulty':'210'}
                 case "T":
-                    eventsDict[24] = {'node': nodeCounter, 'label': 'Tower of Chronos'}
+                    eventsDict[24] = {'node': nodeCounter, 'label': 'Tower of Chronos', 'stage':'T', 'difficulty':'220'}
                 case "U":
-                    eventsDict[25] = {'node': nodeCounter, 'label': 'Human Tribes'}
+                    eventsDict[25] = {'node': nodeCounter, 'label': 'Human Tribes', 'stage':'U', 'difficulty':'230'}
                 case "W":
-                    eventsDict[26] = {'node': nodeCounter, 'label': 'Grotto of Darkness'}
+                    eventsDict[26] = {'node': nodeCounter, 'label': 'Grotto of Darkness', 'stage':'W', 'difficulty':'240'}
                 case "Y":
-                    eventsDict[27] = {'node': nodeCounter, 'label': 'Cave of the Fairy Dragons'}
+                    eventsDict[27] = {'node': nodeCounter, 'label': 'Cave of the Fairy Dragons', 'stage':'Y', 'difficulty':'250'}
                 case "Z":
-                    eventsDict[28] = {'node': nodeCounter, 'label': 'Abyss'}
+                    eventsDict[28] = {'node': nodeCounter, 'label': 'Abyss', 'stage':'Z', 'difficulty':'260'}
                 case "_":
                     print('Erro ao determinar o evento')
             auxArray.append("1")
@@ -131,7 +262,7 @@ def createDistanceMatrix(matrix):
                     distance = abs(currentNode[0]-probedNode[0]) + abs(currentNode[1]-probedNode[1])
                     auxArray.append(distance) 
             heuristic.append(auxArray)
-    print('Tempo de execução da função createDistanceMatrix: ', time.time()-startTime)
+    #print('Tempo de execução da função createDistanceMatrix: ', time.time()-startTime)
     return heuristic
 
 
