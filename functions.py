@@ -1,7 +1,10 @@
 import numpy as np
 import time as time
 import random
-import itertools
+import copy
+
+
+
 
 #Individual class
 class Individual:
@@ -393,36 +396,52 @@ def a_star(graph, heuristic, start, goal):
 def isViable(lst):
 
     flattened = [item for sublist in lst for item in sublist]
-    counts = {}
+    counts =  {}
     for item in flattened:
-        if item not in list(counts.keys()):
-            counts[item] = 1
+        if item['name'] not in list(counts.keys()):
+            counts[item['name']] = 1
         else:
-            counts[item] += 1
+            counts[item['name']] += 1
+    print(counts)
     for count in counts.values():
-        if count >= 11:
+        if count > 11:
             return False
     return True
     
 
-def genetic(characters):
+def genetic(charactersList):
     #1) criar a população 
     populacao=[]
-    individuo=[]
     while len(populacao) < 1:
+        characters = copy.deepcopy(charactersList)
+        individuo=[]
+        maxElementSize = 6
+        #print('characters antes de cada individuo: ', characters,'\n')
         for i in range(28):
             aux=[]
-            qtd_personagens = random.randint(1,2)
-            copia_personagens=characters.copy()
+            qtd_personagens = maxElementSize if maxElementSize == 0 else random.randint(1,maxElementSize)
+            copia_personagens=copy.copy(characters)
             for j in range(qtd_personagens):
+                #print('\ncopia dentro do for: ', copia_personagens,'\n')
                 personagem = random.choice(copia_personagens)
-                aux.append(personagem)
+                #print('\npersonagem escolhido: ', personagem,'\n')
+                idx = characters.index(personagem)
+                if personagem['energy_points'] == 1:
+                    aux.append(personagem)
+                    characters[idx]['energy_points'] -= 1
+                    characters.remove(personagem)
+                    maxElementSize -= 1
+                else:
+                    aux.append(personagem)
+                    characters[idx]['energy_points'] -= 1
                 copia_personagens.remove(personagem)
             
             individuo.append(aux)
         if isViable(individuo):
-            print('\n\n\n\n\válido\n\n\n\n')
+            print('\n\n\n\n válido: ',individuo,'\n\n\n\n')
             populacao.append(individuo)
+        
+    print('\npopulação: ', populacao)
         
     
 

@@ -27,10 +27,10 @@ for i in range (2,28):
     print('Caminho : ',path) 
 
 '''
-# characters = [{'name':'Hank','agility':'1.5', 'energy_points':11}, {'name':'Diana','agility':'1.4', 'energy_points':11}, {'name':'Sheila','agility':'1.3', 'energy_points':11}, 
-#               {'name':'Presto','agility':'1.2', 'energy_points':11}, {'name':'Bob','agility':'1.1', 'energy_points':11}, {'name':'Etic','agility':'1.0', 'energy_points':11}]
+characters = [{'name':'Hank','agility':'1.5', 'energy_points':11}, {'name':'Diana','agility':'1.4', 'energy_points':11}, {'name':'Sheila','agility':'1.3', 'energy_points':11}, 
+              {'name':'Presto','agility':'1.2', 'energy_points':11}, {'name':'Bob','agility':'1.1', 'energy_points':11}, {'name':'Etic','agility':'1.0', 'energy_points':11}]
 
-characters = ['Hank','Diana','Sheila','Presto','Bob','Etic']
+#characters = ['Hank','Diana','Sheila','Presto','Bob','Etic']
 
 # Run the genetic algorithm
 genetic(characters)
