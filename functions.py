@@ -1,6 +1,7 @@
 import numpy as np
 import time as time
 import random
+import itertools
 
 #Individual class
 class Individual:
@@ -388,3 +389,28 @@ def a_star(graph, heuristic, start, goal):
 
         # Lastly, note that we are finished with this node.
         visited[lowest_priority_index] = True
+
+def genetic(characters):
+    #1) criar a população 
+    populacao=[]
+    individuo=[]
+    for i in range(0,28):
+        aux=[]
+        qtd_personagens = random.randint(1,6)
+        copia_personagens=characters
+        for f in range(0,qtd_personagens):
+            personagem=random.choice(copia_personagens)
+            copia_personagens.remove(personagem)
+            aux.append(personagem["name"])
+            print(copia_personagens)
+        #individuo.append(aux)
+        print(individuo)
+    populacao.append(individuo)
+
+    #2) avaliar os individuos
+    scores=[]
+    #for individuo in populacao:
+        #soma_agilidades=0
+        #for personagem in individuo:
+           # soma_agilidades += personagem["agility"]
+        #scores.append(soma_agilidades)
