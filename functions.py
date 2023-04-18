@@ -390,22 +390,41 @@ def a_star(graph, heuristic, start, goal):
         # Lastly, note that we are finished with this node.
         visited[lowest_priority_index] = True
 
+def isViable(lst):
+
+    flattened = [item for sublist in lst for item in sublist]
+    counts = {}
+    for item in flattened:
+        if item not in list(counts.keys()):
+            counts[item] = 1
+        else:
+            counts[item] += 1
+    for count in counts.values():
+        if count >= 11:
+            return False
+    return True
+    
+
 def genetic(characters):
     #1) criar a população 
     populacao=[]
     individuo=[]
-    for i in range(0,28):
-        aux=[]
-        qtd_personagens = random.randint(1,6)
-        copia_personagens=characters
-        for f in range(0,qtd_personagens):
-            personagem=random.choice(copia_personagens)
-            copia_personagens.remove(personagem)
-            aux.append(personagem["name"])
-            print(copia_personagens)
-        #individuo.append(aux)
-        print(individuo)
-    populacao.append(individuo)
+    while len(populacao) < 1:
+        for i in range(28):
+            aux=[]
+            qtd_personagens = random.randint(1,2)
+            copia_personagens=characters.copy()
+            for j in range(qtd_personagens):
+                personagem = random.choice(copia_personagens)
+                aux.append(personagem)
+                copia_personagens.remove(personagem)
+            
+            individuo.append(aux)
+        if isViable(individuo):
+            print('\n\n\n\n\válido\n\n\n\n')
+            populacao.append(individuo)
+        
+    
 
     #2) avaliar os individuos
     scores=[]
