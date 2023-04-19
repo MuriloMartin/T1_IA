@@ -10,21 +10,22 @@ import copy
 class Individual:
     def __init__(self):
         self.fitness = 0
-        self.genes = [0]*5
-        self.geneLength = 5
+        self.genes = []
+        self.nome =''
         
-        #Set genes randomly for each individual
-        for i in range(len(self.genes)):
-            self.genes[i] = abs(random.randint(0,1))
-
-        self.calcFitness()
-
+        
     #Calculate fitness
-    def calcFitness(self):
-        self.fitness = 0
-        for i in range(self.geneLength):
-            if self.genes[i] == 1:
-                self.fitness += 1
+    def fitnessFunction(individuo,CharactersDict,eventsDict):
+        totalTime = 0
+        eventCounter = 1
+        for sublist in range(len(individuo)):
+            agility_sum = 0
+            for personagem in individuo[sublist]:
+                agility_sum += CharactersDict[personagem]['agility']
+            t = eventsDict[eventCounter]['difficulty']/agility_sum
+            totalTime += t
+            eventCounter += 1
+        return 1000/totalTime
 
 #Population class
 class Population:
@@ -414,7 +415,7 @@ def genetic(lista):
     counter=0
     population = []
 
-    while counter < 10:
+    while counter < 100:
         charactersList = ['Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric']
         individuo = []
         for i in range(28): #inicializando todas as posições com 1 personagem
@@ -424,7 +425,7 @@ def genetic(lista):
             individuo.append([personagem])
             charactersList.remove(personagem)
             if i== 27:
-                charactersList.remove(personagem)
+                charactersList.remove(personagem) #removendo o ultimo personagem para que ele não seja adicionado mais 10 vezes em entapadas anteriores
         while len(charactersList) > 0:
             randomCharacterIndex = random.randint(0, len(charactersList)-1)
             personagem = charactersList[randomCharacterIndex]
@@ -443,14 +444,3 @@ def genetic(lista):
         counter += 1
     return population
 
-def fitnessFunction(individuo,CharactersDict,eventsDict):
-    totalTime = 0
-    eventCounter = 1
-    for sublist in range(len(individuo)):
-        agility_sum = 0
-        for personagem in individuo[sublist]:
-            agility_sum += CharactersDict[personagem]['agility']
-        t = eventsDict[eventCounter]['difficulty']/agility_sum
-        totalTime += t
-        eventCounter += 1
-    return totalTime

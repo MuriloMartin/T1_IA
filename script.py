@@ -49,7 +49,9 @@ population = genetic(charactersAvailable)
 #print('population : ',population)
 # Print the best solution
 
+
 # for individuo in population:
-print('Fitness : ',fitnessFunction(population[0],charactersDict,eventsDict))
+# print('Individuo : \n',population[0])
+# print('Fitness : ',fitnessFunction(population[0],charactersDict,eventsDict))
 
 
