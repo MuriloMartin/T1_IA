@@ -412,28 +412,53 @@ def isViable(lst):
 def genetic(charactersList):
     #1) criar a população 
     populacao=[]
-    while len(populacao) < 1:
+    while len(populacao) < 10:
         characters = copy.deepcopy(charactersList)
         individuo=[]
         maxElementSize = 6
+        weights=[100,50,30,15,10,5]
+
         #print('characters antes de cada individuo: ', characters,'\n')
         for i in range(28):
             aux=[]
-            qtd_personagens = maxElementSize if maxElementSize == 0 else random.randint(1,maxElementSize)
+            
+            if maxElementSize!=0:
+                numList= list(range(1, maxElementSize + 1))
+                weights=weights[0: maxElementSize]
+
+            qtd_personagens = maxElementSize if maxElementSize == 0 else random.choices(numList, weights=weights, k=1)
+            
+            if (maxElementSize!=0):
+                qtd_personagens = qtd_personagens[0]
+
             copia_personagens=copy.copy(characters)
             for j in range(qtd_personagens):
                 #print('\ncopia dentro do for: ', copia_personagens,'\n')
                 personagem = random.choice(copia_personagens)
                 #print('\npersonagem escolhido: ', personagem,'\n')
                 idx = characters.index(personagem)
+
+                if i==27 and (personagem['energy_points'] == 1 or personagem['energy_points']==0):
+                    if len(copia_personagens)!=1:
+                        while(personagem['energy_points']==1):
+                            personagem=random.choice(copia_personagens)
+                    else:
+                        for aux in individuo:
+                            for person in aux:
+                                if person['energy_points']>1:
+                                    personagem=person
+                                    personagem['energy_points'] -= 1
+
                 if personagem['energy_points'] == 1:
                     aux.append(personagem)
                     characters[idx]['energy_points'] -= 1
                     characters.remove(personagem)
                     maxElementSize -= 1
+
                 else:
                     aux.append(personagem)
                     characters[idx]['energy_points'] -= 1
+
                 copia_personagens.remove(personagem)
             
             individuo.append(aux)
@@ -441,7 +466,7 @@ def genetic(charactersList):
             print('\n\n\n\n válido: ',individuo,'\n\n\n\n')
             populacao.append(individuo)
         
-    print('\npopulação: ', populacao)
+    #print('\npopulação: ', populacao)
         
     
 
