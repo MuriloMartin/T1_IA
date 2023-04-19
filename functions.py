@@ -168,61 +168,61 @@ def readFile(file):
         elif char:
             match char:
                 case "1":
-                    eventsDict[1] = {'node': nodeCounter, 'label': 'Helix', 'stage':'1', 'difficulty':'10'}
+                    eventsDict[1] = {'node': nodeCounter, 'label': 'Helix', 'stage':'1', 'difficulty':10}
                 case "2":
-                    eventsDict[2] = {'node': nodeCounter, 'label': 'Valley of the Beholder','stage':'2', 'difficulty':'20'}
+                    eventsDict[2] = {'node': nodeCounter, 'label': 'Valley of the Beholder','stage':'2', 'difficulty':20}
                 case "3":
-                    eventsDict[3] =  {'node': nodeCounter, 'label': 'Hall of Bones', 'stage':'3', 'difficulty':'30'}
+                    eventsDict[3] =  {'node': nodeCounter, 'label': 'Hall of Bones', 'stage':'3', 'difficulty':30}
                 case "4":
-                    eventsDict[4] = {'node': nodeCounter, 'label': 'Valley of the Unicorns', 'stage':'4', 'difficulty':'60'}
+                    eventsDict[4] = {'node': nodeCounter, 'label': 'Valley of the Unicorns', 'stage':'4', 'difficulty':60}
                 case "5":
-                    eventsDict[5] = {'node': nodeCounter, 'label': 'Slavemindes of Baltimore', 'stage':'5', 'difficulty':'65'}
+                    eventsDict[5] = {'node': nodeCounter, 'label': 'Slavemindes of Baltimore', 'stage':'5', 'difficulty':65}
                 case "6":
-                    eventsDict[6] = {'node': nodeCounter, 'label': 'Swap of Sorrows', 'stage':'6', 'difficulty':'70'}
+                    eventsDict[6] = {'node': nodeCounter, 'label': 'Swap of Sorrows', 'stage':'6', 'difficulty':70}
                 case "7":
-                    eventsDict[7] = {'node': nodeCounter, 'label': 'Prison of Agony', 'stage':'7', 'difficulty':'75'}
+                    eventsDict[7] = {'node': nodeCounter, 'label': 'Prison of Agony', 'stage':'7', 'difficulty':75}
                 case "8":
-                    eventsDict[8] = {'node': nodeCounter, 'label': 'Valley of the Bogbeasts', 'stage':'8', 'difficulty':'80'}
+                    eventsDict[8] = {'node': nodeCounter, 'label': 'Valley of the Bogbeasts', 'stage':'8', 'difficulty':80}
                 case "9":
-                    eventsDict[9] = {'node': nodeCounter, 'label': 'Tower of the Celestial Knights', 'stage':'9', 'difficulty':'85'}
+                    eventsDict[9] = {'node': nodeCounter, 'label': 'Tower of the Celestial Knights', 'stage':'9', 'difficulty':85}
                 case "B":
-                    eventsDict[10] = {'node': nodeCounter, 'label': 'City of Zinn', 'stage':'B', 'difficulty':'90'}
+                    eventsDict[10] = {'node': nodeCounter, 'label': 'City of Zinn', 'stage':'B', 'difficulty':90}
                 case "C":
-                    eventsDict[11] = {'node': nodeCounter, 'label': 'Skull Montain', 'stage':'C', 'difficulty':'95'}
+                    eventsDict[11] = {'node': nodeCounter, 'label': 'Skull Montain', 'stage':'C', 'difficulty':95}
                 case "E":
-                    eventsDict[12] = {'node': nodeCounter, 'label': 'Forest of the Lost Children', 'stage':'E', 'difficulty':'100'}
+                    eventsDict[12] = {'node': nodeCounter, 'label': 'Forest of the Lost Children', 'stage':'E', 'difficulty':100}
                 case "G":
-                    eventsDict[13] = {'node': nodeCounter, 'label': 'Disaster"	Floating Island', 'stage':'G', 'difficulty':'110'}
+                    eventsDict[13] = {'node': nodeCounter, 'label': 'Disaster"	Floating Island', 'stage':'G', 'difficulty':110}
                 case "H":
-                    eventsDict[14] = {'node': nodeCounter, 'label': 'The maze of Darkness', 'stage':'H', 'difficulty':'120'}
+                    eventsDict[14] = {'node': nodeCounter, 'label': 'The maze of Darkness', 'stage':'H', 'difficulty':120}
                 case "I":
-                    eventsDict[15] = {'node': nodeCounter, 'label': 'Tardos Keep', 'stage':'I', 'difficulty':'130'}
+                    eventsDict[15] = {'node': nodeCounter, 'label': 'Tardos Keep', 'stage':'I', 'difficulty':130}
                 case "J":
-                    eventsDict[16] = {'node': nodeCounter, 'label': 'Oasis of no Return', 'stage':'J', 'difficulty':'140'}
+                    eventsDict[16] = {'node': nodeCounter, 'label': 'Oasis of no Return', 'stage':'J', 'difficulty':140}
                 case "K":
-                    eventsDict[17] = {'node': nodeCounter, 'label': 'Cloud Forest', 'stage':'K', 'difficulty':'150'}
+                    eventsDict[17] = {'node': nodeCounter, 'label': 'Cloud Forest', 'stage':'K', 'difficulty':150}
                 case "L":
-                    eventsDict[18] = {'node': nodeCounter, 'label': 'Darkhaven', 'stage':'L', 'difficulty':'160'}
+                    eventsDict[18] = {'node': nodeCounter, 'label': 'Darkhaven', 'stage':'L', 'difficulty':160}
                 case "N":
-                    eventsDict[19] = {'node': nodeCounter, 'label': 'Forbidden Tower', 'stage':'N', 'difficulty':'170'}
+                    eventsDict[19] = {'node': nodeCounter, 'label': 'Forbidden Tower', 'stage':'N', 'difficulty':170}
                 case "O":
-                    eventsDict[20] = {'node': nodeCounter, 'label': 'Great Glaciers', 'stage':'O', 'difficulty':'180'}
+                    eventsDict[20] = {'node': nodeCounter, 'label': 'Great Glaciers', 'stage':'O', 'difficulty':180}
                 case "P":
-                    eventsDict[21] = {'node': nodeCounter, 'label': 'City of Turodh', 'stage':'P', 'difficulty':'190'}
+                    eventsDict[21] = {'node': nodeCounter, 'label': 'City of Turodh', 'stage':'P', 'difficulty':190}
                 case "Q":
-                    eventsDict[22] = {'node': nodeCounter, 'label': 'Tower of Darkness', 'stage':'Q', 'difficulty':'200'}
+                    eventsDict[22] = {'node': nodeCounter, 'label': 'Tower of Darkness', 'stage':'Q', 'difficulty':200}
                 case "S":
-                    eventsDict[23] = {'node': nodeCounter, 'label': 'Citadel of Shadow', 'stage':'S', 'difficulty':'210'}
+                    eventsDict[23] = {'node': nodeCounter, 'label': 'Citadel of Shadow', 'stage':'S', 'difficulty':210}
                 case "T":
-                    eventsDict[24] = {'node': nodeCounter, 'label': 'Tower of Chronos', 'stage':'T', 'difficulty':'220'}
+                    eventsDict[24] = {'node': nodeCounter, 'label': 'Tower of Chronos', 'stage':'T', 'difficulty':220}
                 case "U":
-                    eventsDict[25] = {'node': nodeCounter, 'label': 'Human Tribes', 'stage':'U', 'difficulty':'230'}
+                    eventsDict[25] = {'node': nodeCounter, 'label': 'Human Tribes', 'stage':'U', 'difficulty':230}
                 case "W":
-                    eventsDict[26] = {'node': nodeCounter, 'label': 'Grotto of Darkness', 'stage':'W', 'difficulty':'240'}
+                    eventsDict[26] = {'node': nodeCounter, 'label': 'Grotto of Darkness', 'stage':'W', 'difficulty':240}
                 case "Y":
-                    eventsDict[27] = {'node': nodeCounter, 'label': 'Cave of the Fairy Dragons', 'stage':'Y', 'difficulty':'250'}
+                    eventsDict[27] = {'node': nodeCounter, 'label': 'Cave of the Fairy Dragons', 'stage':'Y', 'difficulty':250}
                 case "Z":
-                    eventsDict[28] = {'node': nodeCounter, 'label': 'Abyss', 'stage':'Z', 'difficulty':'260'}
+                    eventsDict[28] = {'node': nodeCounter, 'label': 'Abyss', 'stage':'Z', 'difficulty':260}
                 case "_":
                     print('Erro ao determinar o evento')
             auxArray.append("1")
@@ -409,46 +409,48 @@ def isViable(lst):
     return True
     
 
-def genetic(charactersList):
+def genetic(lista):
     #1) criar a população 
-    populacao=[]
-    while len(populacao) < 1:
-        characters = copy.deepcopy(charactersList)
-        individuo=[]
-        maxElementSize = 6
-        #print('characters antes de cada individuo: ', characters,'\n')
-        for i in range(28):
-            aux=[]
-            qtd_personagens = maxElementSize if maxElementSize == 0 else random.randint(1,maxElementSize)
-            copia_personagens=copy.copy(characters)
-            for j in range(qtd_personagens):
-                #print('\ncopia dentro do for: ', copia_personagens,'\n')
-                personagem = random.choice(copia_personagens)
-                #print('\npersonagem escolhido: ', personagem,'\n')
-                idx = characters.index(personagem)
-                if personagem['energy_points'] == 1:
-                    aux.append(personagem)
-                    characters[idx]['energy_points'] -= 1
-                    characters.remove(personagem)
-                    maxElementSize -= 1
-                else:
-                    aux.append(personagem)
-                    characters[idx]['energy_points'] -= 1
-                copia_personagens.remove(personagem)
-            
-            individuo.append(aux)
-        if isViable(individuo):
-            print('\n\n\n\n válido: ',individuo,'\n\n\n\n')
-            populacao.append(individuo)
-        
-    print('\npopulação: ', populacao)
-        
-    
+    counter=0
+    population = []
 
-    #2) avaliar os individuos
-    scores=[]
-    #for individuo in populacao:
-        #soma_agilidades=0
-        #for personagem in individuo:
-           # soma_agilidades += personagem["agility"]
-        #scores.append(soma_agilidades)
+    while counter < 10:
+        charactersList = ['Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric']
+        individuo = []
+        for i in range(28): #inicializando todas as posições com 1 personagem
+            randomIndex = random.randint(0, len(charactersList)-1)
+            personagem = charactersList[randomIndex]
+
+            individuo.append([personagem])
+            charactersList.remove(personagem)
+            if i== 27:
+                charactersList.remove(personagem)
+        while len(charactersList) > 0:
+            randomCharacterIndex = random.randint(0, len(charactersList)-1)
+            personagem = charactersList[randomCharacterIndex]
+            randomIndividualIndex = random.randint(0, len(individuo)-1)
+            if personagem not in individuo[randomIndividualIndex]:
+                individuo[randomIndividualIndex].append(personagem)
+            else:
+                while (personagem in individuo[randomIndividualIndex]):
+                    randomCharacterIndex = random.randint(0, len(charactersList)-1)
+                    randomIndividualIndex = random.randint(0, len(individuo)-1)
+                    personagem = charactersList[randomCharacterIndex]
+                individuo[randomIndividualIndex].append(personagem)
+            charactersList.remove(personagem)
+        
+        population.append(individuo)
+        counter += 1
+    return population
+
+def fitnessFunction(individuo,CharactersDict,eventsDict):
+    totalTime = 0
+    eventCounter = 1
+    for sublist in range(len(individuo)):
+        agility_sum = 0
+        for personagem in individuo[sublist]:
+            agility_sum += CharactersDict[personagem]['agility']
+        t = eventsDict[eventCounter]['difficulty']/agility_sum
+        totalTime += t
+        eventCounter += 1
+    return totalTime
