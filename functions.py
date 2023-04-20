@@ -2,6 +2,7 @@ import numpy as np
 import time as time
 import random
 import copy
+from pprint import pprint
 
 
 
@@ -15,17 +16,7 @@ class Individual:
         
         
     #Calculate fitness
-    def fitnessFunction(individuo,CharactersDict,eventsDict):
-        totalTime = 0
-        eventCounter = 1
-        for sublist in range(len(individuo)):
-            agility_sum = 0
-            for personagem in individuo[sublist]:
-                agility_sum += CharactersDict[personagem]['agility']
-            t = eventsDict[eventCounter]['difficulty']/agility_sum
-            totalTime += t
-            eventCounter += 1
-        return 1000/totalTime
+    
 
 #Population class
 class Population:
@@ -410,45 +401,12 @@ def isViable(lst):
     return True
     
 
-def genetic(lista):
-    #1) criar a população 
-    counter=0
-    population = []
 
-    while counter < 100:
-        charactersList = ['Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric']
-        individuo = []
-        for i in range(28): #inicializando todas as posições com 1 personagem
-            randomIndex = random.randint(0, len(charactersList)-1)
-            personagem = charactersList[randomIndex]
-
-            individuo.append([personagem])
-            charactersList.remove(personagem)
-            if i== 27:
-                charactersList.remove(personagem) #removendo o ultimo personagem para que ele não seja adicionado mais 10 vezes em entapadas anteriores
-        while len(charactersList) > 0:
-            randomCharacterIndex = random.randint(0, len(charactersList)-1)
-            personagem = charactersList[randomCharacterIndex]
-            randomIndividualIndex = random.randint(0, len(individuo)-1)
-            if personagem not in individuo[randomIndividualIndex]:
-                individuo[randomIndividualIndex].append(personagem)
-            else:
-                while (personagem in individuo[randomIndividualIndex]):
-                    randomCharacterIndex = random.randint(0, len(charactersList)-1)
-                    randomIndividualIndex = random.randint(0, len(individuo)-1)
-                    personagem = charactersList[randomCharacterIndex]
-                individuo[randomIndividualIndex].append(personagem)
-            charactersList.remove(personagem)
-        
-        population.append(individuo)
-        counter += 1
-    return population
 
 def createPopulation(population_size):
     #1) criar a população 
     counter=0
     population = []
-
     while counter < population_size:
         characters_available_dict = {
             0: 11, #Hank
@@ -461,7 +419,7 @@ def createPopulation(population_size):
         individuo = np.zeros((28,6))
         for i in range(28): #inicializando todas as posições com 1 personagem
              randomIndex = random.randint(0, 5)
-             print('\nrandomIndex', randomIndex, 'i', i)
+             #print('\nrandomIndex', randomIndex, 'i', i)
              individuo[i][randomIndex] = 1
              characters_available_dict[randomIndex] -= 1
              if i== 27:
@@ -481,5 +439,32 @@ def createPopulation(population_size):
                  characters_available_dict[randomIndex] -= 1
         population.append(individuo)
         counter += 1
-        print(characters_available_dict)
+        #print(characters_available_dict)
     return population
+
+def fintess_function(indivudual,characters_dict,events_dict):
+    total_time = 0
+    eventCounter = 1
+    for groupIndex in range(len(indivudual)):
+        agitili_sum = 0
+        for character_index in range(len(indivudual[groupIndex])):
+            if indivudual[groupIndex][character_index] == 1:
+                agitili_sum += characters_dict[character_index]['agility']
+        t = events_dict[eventCounter]['difficulty']/agitili_sum
+        total_time += t
+        eventCounter += 1
+    return 10000/total_time
+
+def Roleta(population_dict):
+    roleta = []
+    fitness_sum = 0
+    for key in population_dict.keys():
+        fitness_sum += population_dict[key]['fitness']
+    r = random.uniform(0,1)
+    for key in population_dict.keys():
+        pi = population_dict[key]['fitness']/fitness_sum
+        if r < pi:
+            return key
+        else:
+            r -= pi
+    pprint( roleta)
