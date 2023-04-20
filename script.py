@@ -45,8 +45,8 @@ characters = [{'name':'Hank','agility':'1.5', 'energy_points':11}, {'name':'Dian
 charactersAvailable = ['Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Hank','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Diana','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Sheila','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Presto','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Bob','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric','Eric']
 
 # Run the genetic algorithm
-population = genetic(charactersAvailable)
-#print('population : ',population)
+population = createPopulation(1)
+print('population : ',population)
 # Print the best solution
 
 

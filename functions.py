@@ -444,3 +444,42 @@ def genetic(lista):
         counter += 1
     return population
 
+def createPopulation(population_size):
+    #1) criar a população 
+    counter=0
+    population = []
+
+    while counter < population_size:
+        characters_available_dict = {
+            0: 11, #Hank
+            1: 11, #Diana
+            2: 11, #Sheila
+            3: 11, #Presto
+            4: 11, #Bob
+            5: 11, #Eric
+        }
+        individuo = np.zeros((28,6))
+        for i in range(28): #inicializando todas as posições com 1 personagem
+             randomIndex = random.randint(0, 5)
+             print('\nrandomIndex', randomIndex, 'i', i)
+             individuo[i][randomIndex] = 1
+             characters_available_dict[randomIndex] -= 1
+             if i== 27:
+                 characters_available_dict[randomIndex] -= 1 #removendo personagem da ultima etapa novamente para que ele não seja adicionado mais 10 vezes em entapas anteriores 
+        while (characters_available_dict[0] > 0 or characters_available_dict[1] > 0 or characters_available_dict[2] > 0 or characters_available_dict[3] > 0 or characters_available_dict[4] > 0 or characters_available_dict[5] > 0):
+             randomIndex = random.randint(0, 5)
+             randomIndividualIndex = random.randint(0, len(individuo)-1)
+             if individuo[randomIndividualIndex][randomIndex] == 0 and characters_available_dict[randomIndex] > 0:
+                 individuo[randomIndividualIndex][randomIndex] = 1
+                 characters_available_dict[randomIndex] -= 1
+             else:
+                 
+                 while (individuo[randomIndividualIndex][randomIndex] == 1 or characters_available_dict[randomIndex] == 0):
+                     randomIndex = random.randint(0, 5)
+                     randomIndividualIndex = random.randint(0, len(individuo)-1)
+                 individuo[randomIndividualIndex][randomIndex] = 1
+                 characters_available_dict[randomIndex] -= 1
+        population.append(individuo)
+        counter += 1
+        print(characters_available_dict)
+    return population
