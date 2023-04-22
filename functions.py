@@ -5,18 +5,60 @@ import copy
 from pprint import pprint
 
 
-
-
 #Individual class
 class Individual:
-    def __init__(self):
+    def __init__(self, genoma, event):
+        self.genes = np.zeros((28,6))
+        self.genoma = genoma
+        self.event = event
         self.fitness = 0
-        self.genes = []
-        self.nome =''
+
+        counter=0
+        characters_available_dict = {
+            0: 11, #Hank
+            1: 11, #Diana
+            2: 11, #Sheila
+            3: 11, #Presto
+            4: 11, #Bob
+            5: 11, #Eric
+        }
+        for i in range(28): #inicializando todas as posições com 1 personagem
+            randomIndex = random.randint(0, 5)
+            #print('\nrandomIndex', randomIndex, 'i', i)
+            self.genes[i][randomIndex] = 1
+            characters_available_dict[randomIndex] -= 1
+            if i== 27:
+                characters_available_dict[randomIndex] -= 1 #removendo personagem da ultima etapa novamente para que ele não seja adicionado mais 10 vezes em entapas anteriores 
+        while (characters_available_dict[0] > 0 or characters_available_dict[1] > 0 or characters_available_dict[2] > 0 or characters_available_dict[3] > 0 or characters_available_dict[4] > 0 or characters_available_dict[5] > 0):
+            randomIndex = random.randint(0, 5)
+            randomIndividualIndex = random.randint(0, len(self.genes)-1)
+            if self.genes[randomIndividualIndex][randomIndex] == 0 and characters_available_dict[randomIndex] > 0:
+                self.genes[randomIndividualIndex][randomIndex] = 1
+                characters_available_dict[randomIndex] -= 1
+            else:
+                
+                while (self.genes[randomIndividualIndex][randomIndex] == 1 or characters_available_dict[randomIndex] == 0):
+                    randomIndex = random.randint(0, 5)
+                    randomIndividualIndex = random.randint(0, len(self.genes)-1)
+                self.genes[randomIndividualIndex][randomIndex] = 1
+                characters_available_dict[randomIndex] -= 1
+        counter += 1
         
+        self.fitness=self.calcFitness()
         
     #Calculate fitness
-    
+    def calcFitness(self):
+        total_time = 0
+        eventCounter = 1
+        for groupIndex in range(len(self.genes)):
+            agitili_sum = 0
+            for character_index in range(len(self.genes[groupIndex])):
+                if self.genes[groupIndex][character_index] == 1.0:
+                    agitili_sum += self.genoma[character_index]['agility']
+            t = self.event[eventCounter]['difficulty']/agitili_sum
+            total_time += t
+            eventCounter += 1
+        return 10000/total_time
 
 #Population class
 class Population:
@@ -24,49 +66,21 @@ class Population:
         self.popSize = 10
         self.individuals = [None]*self.popSize
         self.fittest = 0
+        self.events = readFile('caverna_dragao_v2.txt')[1]
+        self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
 
-    #Initialize population
-    def initializePopulation(self):
-        for i in range(len(self.individuals)):
-            self.individuals[i] = Individual()
+        self.individuals = self.createPopulation()
 
-    #Get the fittest individual
-    def getFittest(self):
-        maxFit = float('-inf')
-        maxFitIndex = 0
-        for i in range(len(self.individuals)):
-            if maxFit <= self.individuals[i].fitness:
-                maxFit = self.individuals[i].fitness
-                maxFitIndex = i
-        self.fittest = self.individuals[maxFitIndex].fitness
-        return self.individuals[maxFitIndex]
-
-    #Get the second most fittest individual
-    def getSecondFittest(self):
-        maxFit1 = 0
-        maxFit2 = 0
-        for i in range(len(self.individuals)):
-            if self.individuals[i].fitness > self.individuals[maxFit1].fitness:
-                maxFit2 = maxFit1
-                maxFit1 = i
-            elif self.individuals[i].fitness > self.individuals[maxFit2].fitness:
-                maxFit2 = i
-        return self.individuals[maxFit2]
-
-    #Get index of least fittest individual
-    def getLeastFittestIndex(self):
-        minFitVal = float('inf')
-        minFitIndex = 0
-        for i in range(len(self.individuals)):
-            if minFitVal >= self.individuals[i].fitness:
-                minFitVal = self.individuals[i].fitness
-                minFitIndex = i
-        return minFitIndex
-
-    #Calculate fitness of each individual
-    def calculateFitness(self):
-        for i in range(len(self.individuals)):
-            self.individuals[i].calcFitness()
+    def createPopulation(self):
+        #1) criar a população 
+        counter=0
+        population = []
+        while counter < self.popSize:
+            individuo = Individual(event = self.events, genoma=self.characters)
+            population.append(individuo.genes.tolist())
+            counter += 1
+            #print(characters_available_dict)
+        return population
 
 #Main class
 class SimpleDemoGA:
@@ -75,6 +89,21 @@ class SimpleDemoGA:
         self.fittest = None
         self.secondFittest = None
         self.generationCount = 0
+
+
+    def Roleta(population_dict):
+        roleta = []
+        fitness_sum = 0
+        for key in population_dict.keys():
+            fitness_sum += population_dict[key]['fitness']
+        r = random.uniform(0,1)
+        for key in population_dict.keys():
+            pi = population_dict[key]['fitness']/fitness_sum
+            if r < pi:
+                return key
+            else:
+                r -= pi
+        pprint( roleta)
 
     def selection(self):
         #Select the most fittest individual
@@ -385,75 +414,6 @@ def a_star(graph, heuristic, start, goal):
         # Lastly, note that we are finished with this node.
         visited[lowest_priority_index] = True
 
-def isViable(lst):
-
-    flattened = [item for sublist in lst for item in sublist]
-    counts =  {}
-    for item in flattened:
-        if item['name'] not in list(counts.keys()):
-            counts[item['name']] = 1
-        else:
-            counts[item['name']] += 1
-    print(counts)
-    for count in counts.values():
-        if count > 11:
-            return False
-    return True
-    
-
-
-
-def createPopulation(population_size):
-    #1) criar a população 
-    counter=0
-    population = []
-    while counter < population_size:
-        characters_available_dict = {
-            0: 11, #Hank
-            1: 11, #Diana
-            2: 11, #Sheila
-            3: 11, #Presto
-            4: 11, #Bob
-            5: 11, #Eric
-        }
-        individuo = np.zeros((28,6))
-        for i in range(28): #inicializando todas as posições com 1 personagem
-             randomIndex = random.randint(0, 5)
-             #print('\nrandomIndex', randomIndex, 'i', i)
-             individuo[i][randomIndex] = 1
-             characters_available_dict[randomIndex] -= 1
-             if i== 27:
-                 characters_available_dict[randomIndex] -= 1 #removendo personagem da ultima etapa novamente para que ele não seja adicionado mais 10 vezes em entapas anteriores 
-        while (characters_available_dict[0] > 0 or characters_available_dict[1] > 0 or characters_available_dict[2] > 0 or characters_available_dict[3] > 0 or characters_available_dict[4] > 0 or characters_available_dict[5] > 0):
-             randomIndex = random.randint(0, 5)
-             randomIndividualIndex = random.randint(0, len(individuo)-1)
-             if individuo[randomIndividualIndex][randomIndex] == 0 and characters_available_dict[randomIndex] > 0:
-                 individuo[randomIndividualIndex][randomIndex] = 1
-                 characters_available_dict[randomIndex] -= 1
-             else:
-                 
-                 while (individuo[randomIndividualIndex][randomIndex] == 1 or characters_available_dict[randomIndex] == 0):
-                     randomIndex = random.randint(0, 5)
-                     randomIndividualIndex = random.randint(0, len(individuo)-1)
-                 individuo[randomIndividualIndex][randomIndex] = 1
-                 characters_available_dict[randomIndex] -= 1
-        population.append(individuo)
-        counter += 1
-        #print(characters_available_dict)
-    return population
-
-def fintess_function(indivudual,characters_dict,events_dict):
-    total_time = 0
-    eventCounter = 1
-    for groupIndex in range(len(indivudual)):
-        agitili_sum = 0
-        for character_index in range(len(indivudual[groupIndex])):
-            if indivudual[groupIndex][character_index] == 1:
-                agitili_sum += characters_dict[character_index]['agility']
-        t = events_dict[eventCounter]['difficulty']/agitili_sum
-        total_time += t
-        eventCounter += 1
-    return 10000/total_time
 
 def Roleta(population_dict):
     roleta = []
