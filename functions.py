@@ -9,6 +9,7 @@ from pprint import pprint
 class Individual:
     def __init__(self, genoma, event):
         self.genes = np.zeros((28,6))
+        self.geneLength = 28
         self.genoma = genoma
         self.event = event
         self.fitness = 0
@@ -22,6 +23,8 @@ class Individual:
             4: 11, #Bob
             5: 11, #Eric
         }
+
+        #creating individual
         for i in range(28): #inicializando todas as posições com 1 personagem
             randomIndex = random.randint(0, 5)
             #print('\nrandomIndex', randomIndex, 'i', i)
@@ -64,12 +67,15 @@ class Individual:
 class Population:
     def __init__(self):
         self.popSize = 10
-        self.individuals = [None]*self.popSize
         self.fittest = 0
         self.events = readFile('caverna_dragao_v2.txt')[1]
         self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
+        self.individuals = [Individual(event = self.events, genoma=self.characters)] *self.popSize
+        self.fitness = 0
+
 
         self.individuals = self.createPopulation()
+        self.fitness = self.calculateFitnessPopulation()
 
     def createPopulation(self):
         #1) criar a população 
@@ -77,67 +83,101 @@ class Population:
         population = []
         while counter < self.popSize:
             individuo = Individual(event = self.events, genoma=self.characters)
-            population.append(individuo.genes.tolist())
+            population.append(individuo)
             counter += 1
             #print(characters_available_dict)
         return population
+    
+    def calculateFitnessPopulation(self):
+        popFit = 0
+        for individuo in self.individuals:
+            popFit += individuo.fitness
+        return popFit
 
 #Main class
 class SimpleDemoGA:
     def __init__(self):
         self.population = Population()
-        self.fittest = None
-        self.secondFittest = None
-        self.generationCount = 0
+        self.individuoPai = None
+        self.individuoMae = None
+        self.individuoFilho = None
 
+        self.GA()
 
-    def Roleta(population_dict):
+    def GA(self):
+        MaxIndividuos = 2
+        MaxGeracoes = 2
+        geracao = 0
+        
+        while geracao < MaxGeracoes:
+            novaPopulacao = []
+            individuos = 0
+            
+            while individuos < MaxIndividuos:
+                self.individuoPai = self.Roleta()
+                self.individuoMae = self.Roleta()
+                self.individuoFilho = self.crossover()
+                probMutacao = random.uniform(0, 1)
+                
+                if probMutacao <= 0.05:
+                    self.individuoFilho = self.mutation()
+                    
+                novaPopulacao.append(self.individuoFilho)
+                individuos += 1
+
+            print("Geração %d: " %(geracao))
+            print("População: ", novaPopulacao)
+            novaPopulacao = self.population.individuals
+
+            geracao += 1
+            
+        
+        #return max(PopulacaoAtual, key=individuo.fitness) # retorna o individuo com maior fitness (máximo local)
+
+    def Roleta(self):
         roleta = []
         fitness_sum = 0
-        for key in population_dict.keys():
-            fitness_sum += population_dict[key]['fitness']
+        for individuo in self.population.individuals:
+            fitness_sum += individuo.fitness
         r = random.uniform(0,1)
-        for key in population_dict.keys():
-            pi = population_dict[key]['fitness']/fitness_sum
+        for individuo in self.population.individuals:
+            pi = individuo.fitness/fitness_sum
             if r < pi:
-                return key
+                return individuo
             else:
                 r -= pi
         pprint( roleta)
 
-    def selection(self):
-        #Select the most fittest individual
-        self.fittest = self.population.getFittest()
-
-        #Select the second most fittest individual
-        self.secondFittest = self.population.getSecondFittest()
-
     def crossover(self):
-        #Select a random crossover point
-        crossOverPoint = random.randint(0, self.population.individuals[0].geneLength-1)
+        # seleção do ponto de crossover
+        pontoCorte = random.randint(1, self.individuoPai.geneLength-1)
+        
+        partePai = self.individuoPai.genes[:pontoCorte].tolist()
+        parteMae = self.individuoMae.genes[pontoCorte:].tolist()
 
-        #Swap values among parents
-        for i in range(crossOverPoint):
-            temp = self.fittest.genes[i]
-            self.fittest.genes[i] = self.secondFittest.genes[i]
-            self.secondFittest.genes[i] = temp
+        # criação do filho
+        filho = partePai + parteMae
+        
+        return filho
     
     def mutation(self):
         # Select a random mutation point
-        mutationPoint = random.randint(0, len(self.population.individuals[0].genes) - 1)
+        mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
+        mutationPointCharacter = random.randint(0,5)
 
         # Flip values at the mutation point
-        if self.fittest.genes[mutationPoint] == 0:
-            self.fittest.genes[mutationPoint] = 1
+        if self.individuoPai.genes[mutationPointGene][mutationPointCharacter] == 0:
+            self.individuoPai.genes[mutationPointGene][mutationPointCharacter] = 1
         else:
-            self.fittest.genes[mutationPoint] = 0
+            self.individuoPai.genes[mutationPointGene][mutationPointCharacter] = 0
 
-        mutationPoint = random.randint(0, len(self.population.individuals[0].genes) - 1)
+        mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
+        mutationPointCharacter = random.randint(0,5)
 
-        if self.secondFittest.genes[mutationPoint] == 0:
-            self.secondFittest.genes[mutationPoint] = 1
+        if self.individuoMae.genes[mutationPointGene][mutationPointCharacter] == 0:
+            self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 1
         else:
-            self.secondFittest.genes[mutationPoint] = 0
+            self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 0
 
     # Get fittest offspring
     def getFittestOffspring(self):
@@ -415,16 +455,16 @@ def a_star(graph, heuristic, start, goal):
         visited[lowest_priority_index] = True
 
 
-def Roleta(population_dict):
-    roleta = []
-    fitness_sum = 0
-    for key in population_dict.keys():
-        fitness_sum += population_dict[key]['fitness']
-    r = random.uniform(0,1)
-    for key in population_dict.keys():
-        pi = population_dict[key]['fitness']/fitness_sum
-        if r < pi:
-            return key
-        else:
-            r -= pi
-    pprint( roleta)
+# def Roleta(population_dict):
+#     roleta = []
+#     fitness_sum = 0
+#     for key in population_dict.keys():
+#         fitness_sum += population_dict[key]['fitness']
+#     r = random.uniform(0,1)
+#     for key in population_dict.keys():
+#         pi = population_dict[key]['fitness']/fitness_sum
+#         if r < pi:
+#             return key
+#         else:
+#             r -= pi
+#     pprint( roleta)
