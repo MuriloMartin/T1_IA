@@ -3,6 +3,7 @@ import time as time
 import random
 import copy
 from pprint import pprint
+import itertools
 
 
 #Individual class
@@ -164,9 +165,9 @@ class SimpleDemoGA:
                      self.individuoMae = self.Roleta()
                      self.individuoFilho = self.crossover()
 
-                # probMutacao = random.uniform(0, 1)
-                # if probMutacao <= 0.1:
-                #       self.individuoFilho = self.mutation()
+                probMutacao = random.uniform(0, 1)
+                if probMutacao <= 0.1:
+                      self.individuoFilho = self.mutation()
                     
                 novaPopulacao.append(self.individuoFilho)
                 individuos += 1
@@ -190,6 +191,7 @@ class SimpleDemoGA:
             
         
         #return max(PopulacaoAtual, key=individuo.fitness) # retorna o individuo com maior fitness (máximo local)
+        return bestIndividual
 
     def Roleta(self):
         roleta = []
@@ -222,9 +224,34 @@ class SimpleDemoGA:
     def mutation(self):
        
         generated_viable_child = False
+        c = copy.deepcopy(self.individuoFilho.genes)
+        c = c[:-1]
+        ultimo_genoma=[]
+        ultimo_genoma.append(self.individuoFilho.genes[-1])
+        print(self.individuoFilho.genes)
+        eVdd = self.individuoFilho.isViable()
         while not generated_viable_child:
-            self.individuoFilho.genes = random.shuffle(self.individuoFilho.genes)
-            generated_viable_child =  self.individuoFilho.isViable()
+            random.shuffle(c)
+            res = list(itertools.chain(c, ultimo_genoma))
+            print(res)
+            from collections import Counter
+
+            list1 = res
+            list2 = self.individuoFilho.genes[0:28]
+
+            # Flatten the lists using a list comprehension
+            flat_list1 = [item for sublist in list1 for item in sublist]
+            flat_list2 = [item for sublist in list2 for item in sublist]
+
+            # Count the frequency of each element in both lists using Counter
+            count1 = Counter(flat_list1)
+            count2 = Counter(flat_list2)
+
+            # Compare the two Counter objects using ==
+            vdd=(count1 == count2)
+            
+            mutado = Individual(event = self.population.events, charactersDict = self.population.characters, genesRecieved = res)
+            generated_viable_child = mutado.isViable()
         return self.individuoFilho
     
         # # Select a random mutation point
@@ -262,6 +289,12 @@ class SimpleDemoGA:
 
         # Replace least fittest individual from most fittest offspring
         self.population.individuals[self.leastFittestIndex] = self.getFittestOffspring()
+    
+    # def calculateBestTime(self,individuo):
+    #     counterFase=1
+    #     for genoma in individuo:
+    #         for i in range(0,6):
+
 
 def readFile(file):
     file = open(file, 'r')
