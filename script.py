@@ -57,7 +57,6 @@ characters = [{'name':'Hank','agility':'1.5', 'energy_points':11}, {'name':'Dian
 # print("pop: ", pop.individuals)
 
 ga = SimpleDemoGA()
-
 # Run the genetic algorithm
 
 # population = createPopulation(50)
