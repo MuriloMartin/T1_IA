@@ -7,14 +7,14 @@ from pprint import pprint
 
 #Individual class
 class Individual:
-    def __init__(self, genoma, event):
+    def __init__(self, charactersDict, event, genesRecieved = []):
         self.genes = np.zeros((28,6))
         self.geneLength = 28
-        self.genoma = genoma
+        self.charactersDict = charactersDict
         self.event = event
         self.fitness = 0
 
-        counter=0
+
         characters_available_dict = {
             0: 11, #Hank
             1: 11, #Diana
@@ -24,29 +24,32 @@ class Individual:
             5: 11, #Eric
         }
 
-        #creating individual
-        for i in range(28): #inicializando todas as posições com 1 personagem
-            randomIndex = random.randint(0, 5)
-            #print('\nrandomIndex', randomIndex, 'i', i)
-            self.genes[i][randomIndex] = 1
-            characters_available_dict[randomIndex] -= 1
-            if i== 27:
-                characters_available_dict[randomIndex] -= 1 #removendo personagem da ultima etapa novamente para que ele não seja adicionado mais 10 vezes em entapas anteriores 
-        while (characters_available_dict[0] > 0 or characters_available_dict[1] > 0 or characters_available_dict[2] > 0 or characters_available_dict[3] > 0 or characters_available_dict[4] > 0 or characters_available_dict[5] > 0):
-            randomIndex = random.randint(0, 5)
-            randomIndividualIndex = random.randint(0, len(self.genes)-1)
-            if self.genes[randomIndividualIndex][randomIndex] == 0 and characters_available_dict[randomIndex] > 0:
-                self.genes[randomIndividualIndex][randomIndex] = 1
+        if not len(genesRecieved) > 0:
+            #creating individual
+            for i in range(28): #inicializando todas as posições com 1 personagem
+                randomIndex = random.randint(0, 5)
+                #print('\nrandomIndex', randomIndex, 'i', i)
+                self.genes[i][randomIndex] = 1
                 characters_available_dict[randomIndex] -= 1
-            else:
-                
-                while (self.genes[randomIndividualIndex][randomIndex] == 1 or characters_available_dict[randomIndex] == 0):
-                    randomIndex = random.randint(0, 5)
-                    randomIndividualIndex = random.randint(0, len(self.genes)-1)
-                self.genes[randomIndividualIndex][randomIndex] = 1
-                characters_available_dict[randomIndex] -= 1
-        counter += 1
-        
+                if i== 27:
+                    characters_available_dict[randomIndex] -= 1 #removendo personagem da ultima etapa novamente para que ele não seja adicionado mais 10 vezes em entapas anteriores 
+            while (characters_available_dict[0] > 0 or characters_available_dict[1] > 0 or characters_available_dict[2] > 0 or characters_available_dict[3] > 0 or characters_available_dict[4] > 0 or characters_available_dict[5] > 0):
+                randomIndex = random.randint(0, 5)
+                randomIndividualIndex = random.randint(0, len(self.genes)-1)
+                if self.genes[randomIndividualIndex][randomIndex] == 0 and characters_available_dict[randomIndex] > 0:
+                    self.genes[randomIndividualIndex][randomIndex] = 1
+                    characters_available_dict[randomIndex] -= 1
+                else:
+                    
+                    while (self.genes[randomIndividualIndex][randomIndex] == 1 or characters_available_dict[randomIndex] == 0):
+                        randomIndex = random.randint(0, 5)
+                        randomIndividualIndex = random.randint(0, len(self.genes)-1)
+                    self.genes[randomIndividualIndex][randomIndex] = 1
+                    characters_available_dict[randomIndex] -= 1
+
+        else:
+            self.genes = genesRecieved
+
         self.fitness=self.calcFitness()
         
     #Calculate fitness
@@ -57,20 +60,53 @@ class Individual:
             agitili_sum = 0
             for character_index in range(len(self.genes[groupIndex])):
                 if self.genes[groupIndex][character_index] == 1.0:
-                    agitili_sum += self.genoma[character_index]['agility']
+                    agitili_sum += self.charactersDict[character_index]['agility']
             t = self.event[eventCounter]['difficulty']/agitili_sum
             total_time += t
             eventCounter += 1
         return 10000/total_time
+    
+    def isViable(self):
+        counterDict = {0:0, 1:0, 2:0, 3:0, 4:0, 5:0}
+        eventCounter = 0
+        last_event_characters = []
+        for sub_lista in self.genes:
+            for i in range(6):
+                if eventCounter == 27:
+                    if sub_lista[i] == 1.0:
+                        counterDict[i]+= 1
+                        last_event_characters.append(i)
+                        
+                elif sub_lista[i] == 1.0:
+                   counterDict[i] += 1
+            eventCounter += 1
+            
+
+       
+        one_character_survives = False
+        for key in last_event_characters:
+            if counterDict[key] < 11:
+                one_character_survives = True
+        
+        if one_character_survives:
+            for key in counterDict.keys():
+                if counterDict[key]> 11:
+                    return False
+            #print('\n\ncounterDict : ', counterDict)
+            return True
+            
+        else:
+            return False
+        
 
 #Population class
 class Population:
     def __init__(self):
-        self.popSize = 10
+        self.popSize = 10000
         self.fittest = 0
         self.events = readFile('caverna_dragao_v2.txt')[1]
         self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
-        self.individuals = [Individual(event = self.events, genoma=self.characters)] *self.popSize
+        self.individuals = []#[Individual(event = self.events, charactersDict=self.characters)] *self.popSize
         self.fitness = 0
 
 
@@ -82,10 +118,9 @@ class Population:
         counter=0
         population = []
         while counter < self.popSize:
-            individuo = Individual(event = self.events, genoma=self.characters)
+            individuo = Individual(event = self.events, charactersDict=self.characters)
             population.append(individuo)
             counter += 1
-            #print(characters_available_dict)
         return population
     
     def calculateFitnessPopulation(self):
@@ -105,8 +140,8 @@ class SimpleDemoGA:
         self.GA()
 
     def GA(self):
-        MaxIndividuos = 2
-        MaxGeracoes = 2
+        MaxIndividuos = 10000
+        MaxGeracoes = 100
         geracao = 0
         
         while geracao < MaxGeracoes:
@@ -117,18 +152,31 @@ class SimpleDemoGA:
                 self.individuoPai = self.Roleta()
                 self.individuoMae = self.Roleta()
                 self.individuoFilho = self.crossover()
-                probMutacao = random.uniform(0, 1)
-                
-                if probMutacao <= 0.05:
-                    self.individuoFilho = self.mutation()
+                while (self.individuoFilho.isViable() == False):
+                     self.individuoPai = self.Roleta()
+                     self.individuoMae = self.Roleta()
+                     self.individuoFilho = self.crossover()
+
+                # probMutacao = random.uniform(0, 1)
+                # if probMutacao <= 0.1:
+                #       self.individuoFilho = self.mutation()
                     
                 novaPopulacao.append(self.individuoFilho)
                 individuos += 1
 
-            print("Geração %d: " %(geracao))
-            print("População: ", novaPopulacao)
-            novaPopulacao = self.population.individuals
-
+            
+            
+            #novaPopulacao = self.population.individuals
+            self.population.individuals = novaPopulacao
+            
+            highestFitness = 0
+            for individuo in novaPopulacao:
+                if individuo.fitness > highestFitness:
+                    highestFitness = individuo.fitness
+                    bestIndividual = individuo
+            print("\nGeração %d: \n" %(geracao))
+            print("Melhor fitness: %f\n" %(highestFitness))
+            print('Melhor individuo: ', bestIndividual.genes)
             geracao += 1
             
         
@@ -146,38 +194,47 @@ class SimpleDemoGA:
                 return individuo
             else:
                 r -= pi
-        pprint( roleta)
+
 
     def crossover(self):
         # seleção do ponto de crossover
-        pontoCorte = random.randint(1, self.individuoPai.geneLength-1)
         
+        pontoCorte = random.randint(1, self.individuoPai.geneLength-1)
+
+
         partePai = self.individuoPai.genes[:pontoCorte].tolist()
         parteMae = self.individuoMae.genes[pontoCorte:].tolist()
-
         # criação do filho
-        filho = partePai + parteMae
-        
+        new_genes = partePai + parteMae
+        filho = Individual(event = self.population.events, charactersDict = self.population.characters, genesRecieved = np.array(new_genes))
+ 
         return filho
     
     def mutation(self):
-        # Select a random mutation point
-        mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
-        mutationPointCharacter = random.randint(0,5)
+       
+        generated_viable_child = False
+        while not generated_viable_child:
+            self.individuoFilho.genes = random.shuffle(self.individuoFilho.genes)
+            generated_viable_child =  self.individuoFilho.isViable()
+        return self.individuoFilho
+    
+        # # Select a random mutation point
+        # mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
+        # mutationPointCharacter = random.randint(0,5)
 
-        # Flip values at the mutation point
-        if self.individuoPai.genes[mutationPointGene][mutationPointCharacter] == 0:
-            self.individuoPai.genes[mutationPointGene][mutationPointCharacter] = 1
-        else:
-            self.individuoPai.genes[mutationPointGene][mutationPointCharacter] = 0
+        # # Flip values at the mutation point
+        # if self.individuoPai.genes[mutationPointGene][mutationPointCharacter] == 0:
+        #     self.individuoPai.genes[mutationPointGene][mutationPointCharacter] = 1
+        # else:
+        #     self.individuoPai.genes[mutationPointGene][mutationPointCharacter] = 0
 
-        mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
-        mutationPointCharacter = random.randint(0,5)
+        # mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
+        # mutationPointCharacter = random.randint(0,5)
 
-        if self.individuoMae.genes[mutationPointGene][mutationPointCharacter] == 0:
-            self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 1
-        else:
-            self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 0
+        # if self.individuoMae.genes[mutationPointGene][mutationPointCharacter] == 0:
+        #     self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 1
+        # else:
+        #     self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 0
 
     # Get fittest offspring
     def getFittestOffspring(self):
