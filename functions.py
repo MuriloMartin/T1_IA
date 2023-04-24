@@ -92,6 +92,10 @@ class Individual:
             for key in counterDict.keys():
                 if counterDict[key]> 11:
                     return False
+                if key in last_event_characters and counterDict[key]<10:
+                    return False
+                if counterDict[key]<11 and key not in last_event_characters:
+                     return False
             #print('\n\ncounterDict : ', counterDict)
             return True
             
@@ -101,16 +105,19 @@ class Individual:
 
 #Population class
 class Population:
-    def __init__(self):
-        self.popSize = 10000
+    def __init__(self, individualsReceived = []):
+        self.popSize = 100
         self.fittest = 0
         self.events = readFile('caverna_dragao_v2.txt')[1]
         self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
         self.individuals = []#[Individual(event = self.events, charactersDict=self.characters)] *self.popSize
         self.fitness = 0
 
-
-        self.individuals = self.createPopulation()
+        if not len(individualsReceived) > 0:
+            self.individuals = self.createPopulation()
+        else:
+            self.individuals = individualsReceived
+        
         self.fitness = self.calculateFitnessPopulation()
 
     def createPopulation(self):
@@ -140,7 +147,7 @@ class SimpleDemoGA:
         self.GA()
 
     def GA(self):
-        MaxIndividuos = 10000
+        MaxIndividuos = self.population.popSize
         MaxGeracoes = 100
         geracao = 0
         
@@ -167,16 +174,18 @@ class SimpleDemoGA:
             
             
             #novaPopulacao = self.population.individuals
-            self.population.individuals = novaPopulacao
+            self.population = Population(individualsReceived=novaPopulacao)
             
             highestFitness = 0
             for individuo in novaPopulacao:
                 if individuo.fitness > highestFitness:
                     highestFitness = individuo.fitness
                     bestIndividual = individuo
+
             print("\nGeração %d: \n" %(geracao))
+            print("Fitness da pop: %f \n" %(self.population.fitness))
             print("Melhor fitness: %f\n" %(highestFitness))
-            print('Melhor individuo: ', bestIndividual.genes)
+            #print('Melhor individuo: ', bestIndividual.genes)
             geracao += 1
             
         
