@@ -7,12 +7,17 @@ from pprint import pprint
 
 #Individual class
 class Individual:
-    def __init__(self, genoma, event):
-        self.genes = np.zeros((28,6))
+    def __init__(self, genes = None):
+        if genes is None:
+            self.genes = np.zeros((28,6))
+        else:
+            self.genes = genes
+        #self.genes = np.zeros((28,6))
         self.geneLength = 28
-        self.genoma = genoma
-        self.event = event
+        self.event = readFile('caverna_dragao_v2.txt')[1]
+        self.genoma = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
         self.fitness = 0
+
 
         counter=0
         characters_available_dict = {
@@ -66,11 +71,9 @@ class Individual:
 #Population class
 class Population:
     def __init__(self):
-        self.popSize = 10
+        self.popSize = 20
         self.fittest = 0
-        self.events = readFile('caverna_dragao_v2.txt')[1]
-        self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
-        self.individuals = [Individual(event = self.events, genoma=self.characters)] *self.popSize
+        self.individuals = [Individual()] *self.popSize
         self.fitness = 0
 
 
@@ -82,7 +85,7 @@ class Population:
         counter=0
         population = []
         while counter < self.popSize:
-            individuo = Individual(event = self.events, genoma=self.characters)
+            individuo = Individual()
             population.append(individuo)
             counter += 1
             #print(characters_available_dict)
@@ -109,6 +112,7 @@ class SimpleDemoGA:
         MaxGeracoes = 2
         geracao = 0
         
+        
         while geracao < MaxGeracoes:
             novaPopulacao = []
             individuos = 0
@@ -123,10 +127,14 @@ class SimpleDemoGA:
                     self.individuoFilho = self.mutation()
                     
                 novaPopulacao.append(self.individuoFilho)
+                #fitness=self.individuoFilho.fitness
                 individuos += 1
 
             print("Geração %d: " %(geracao))
-            print("População: ", novaPopulacao)
+            for ind in novaPopulacao:
+                if ind != None:
+                    print("Indivíduo: ", ind.genes)
+                    print("fitness: ", ind.fitness)
             novaPopulacao = self.population.individuals
 
             geracao += 1
@@ -156,7 +164,9 @@ class SimpleDemoGA:
         parteMae = self.individuoMae.genes[pontoCorte:].tolist()
 
         # criação do filho
-        filho = partePai + parteMae
+        filho = Individual()
+        filho.genes = parteMae+partePai
+        filho.fitness = filho.calcFitness()
         
         return filho
     
