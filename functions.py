@@ -153,7 +153,7 @@ class SimpleDemoGA:
         self.individuoMae = None
         self.individuoFilho = None
 
-        self.GA()
+        self.bestIndividual = self.GA()
 
     def GA(self):
         MaxIndividuos = self.population.popSize
@@ -176,21 +176,7 @@ class SimpleDemoGA:
 
                 probMutacao = random.uniform(0, 1)
                 if probMutacao <= 0.05:
-                      generated_viable_child = False
-                      genesCopy = self.individuoFilho.genes.copy()
-                      counter = 0
-                      while counter < 7:
-                        #print('genes: ', self.individuoFilho.genes)
-                        randomPosition1 = random.randint(1, 26)
-                        randomPosition2 = random.randint(1,26)
-                        auxElement = self.individuoFilho.genes[randomPosition1]
-                        auxElement2 = self.individuoFilho.genes[randomPosition2]
-                        genesCopy[randomPosition1] = auxElement2
-                        genesCopy[randomPosition2] = auxElement
-                        counter += 1
-
-                      self.individuoFilho = Individual(charactersDict= self.individuoFilho.charactersDict,event=self.individuoFilho.event, genesRecieved=genesCopy)
-                        
+                      self.mutation()
                         
                     
                 novaPopulacao.append(self.individuoFilho)
@@ -213,7 +199,7 @@ class SimpleDemoGA:
             print("\nGeração %d: \n" %(geracao))
             print("Fitness da pop: %f " %(self.population.fitness))
            
-            if geracao == 249:
+            if geracao == (MaxGeracoes-1):
                 print("Melhor fitness: %f\n" %(highestFitness))
                 print('Melhor individuo: ', bestIndividual.genes)
                 print('Melhor fitness overall: ', highestFitnessOverall)
@@ -222,7 +208,7 @@ class SimpleDemoGA:
                        #print("Individuo é viavel? : %s" %(individual.isViable()))
             geracao += 1
             
-        
+        return bestIndividualOverall
         #return max(PopulacaoAtual, key=individuo.fitness) # retorna o individuo com maior fitness (máximo local)
 
     def Roleta(self):
@@ -253,9 +239,25 @@ class SimpleDemoGA:
         return filho
     
     def mutation(self):
-        genes = self.individuoFilho.genes
-        random.shuffle(genes) 
-        return genes
+
+        generated_viable_child = False
+        genesCopy = self.individuoFilho.genes.copy()
+        counter = 0
+        #print('genes: ', self.individuoFilho.genes)
+        randomPosition1 = random.randint(1, 26)
+        randomPosition2 = random.randint(1,26)
+        auxElement = self.individuoFilho.genes[randomPosition1]
+        auxElement2 = self.individuoFilho.genes[randomPosition2]
+        genesCopy[randomPosition1] = auxElement2
+        genesCopy[randomPosition2] = auxElement
+        counter += 1
+
+        self.individuoFilho = Individual(charactersDict= self.individuoFilho.charactersDict,event=self.individuoFilho.event, genesRecieved=genesCopy)
+        
+
+        # genes = self.individuoFilho.genes
+        # random.shuffle(genes) 
+        # return genes
     
         # # Select a random mutation point
         # mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
@@ -274,24 +276,6 @@ class SimpleDemoGA:
         #     self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 1
         # else:
         #     self.individuoMae.genes[mutationPointGene][mutationPointCharacter] = 0
-
-    # Get fittest offspring
-    def getFittestOffspring(self):
-        if self.fittest.fitness > self.secondFittest.fitness:
-            return self.fittest
-        return self.secondFittest
-
-    # Replace least fittest individual from most fittest offspring
-    def addFittestOffspring(self):
-        # Update fitness values of offspring
-        self.fittest.calcFitness()
-        self.secondFittest.calcFitness()
-
-        # Get index of least fit individual
-        self.leastFittestIndex = self.population.getLeastFittestIndex()
-
-        # Replace least fittest individual from most fittest offspring
-        self.population.individuals[self.leastFittestIndex] = self.getFittestOffspring()
 
 def readFile(file):
     file = open(file, 'r')
