@@ -97,6 +97,15 @@ class Individual:
                 if counterDict[key]<11 and key not in last_event_characters:
                      return False
             #print('\n\ncounterDict : ', counterDict)
+            for key in last_event_characters:
+                if counterDict[key] == 10:
+                    remaining_keys = last_event_characters.copy()
+                    remaining_keys.remove(key)
+                    for remaining_key in remaining_keys:
+                        if counterDict[remaining_key] <11:
+                            return False
+                    
+
             return True
             
         else:
@@ -106,7 +115,7 @@ class Individual:
 #Population class
 class Population:
     def __init__(self, individualsReceived = []):
-        self.popSize = 100
+        self.popSize = 1000
         self.fittest = 0
         self.events = readFile('caverna_dragao_v2.txt')[1]
         self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
@@ -148,9 +157,10 @@ class SimpleDemoGA:
 
     def GA(self):
         MaxIndividuos = self.population.popSize
-        MaxGeracoes = 100
+        MaxGeracoes = 250
         geracao = 0
         
+        highestFitnessOverall = 0
         while geracao < MaxGeracoes:
             novaPopulacao = []
             individuos = 0
@@ -164,9 +174,24 @@ class SimpleDemoGA:
                      self.individuoMae = self.Roleta()
                      self.individuoFilho = self.crossover()
 
-                # probMutacao = random.uniform(0, 1)
-                # if probMutacao <= 0.1:
-                #       self.individuoFilho = self.mutation()
+                probMutacao = random.uniform(0, 1)
+                if probMutacao <= 0.05:
+                      generated_viable_child = False
+                      genesCopy = self.individuoFilho.genes.copy()
+                      counter = 0
+                      while counter < 7:
+                        #print('genes: ', self.individuoFilho.genes)
+                        randomPosition1 = random.randint(1, 26)
+                        randomPosition2 = random.randint(1,26)
+                        auxElement = self.individuoFilho.genes[randomPosition1]
+                        auxElement2 = self.individuoFilho.genes[randomPosition2]
+                        genesCopy[randomPosition1] = auxElement2
+                        genesCopy[randomPosition2] = auxElement
+                        counter += 1
+
+                      self.individuoFilho = Individual(charactersDict= self.individuoFilho.charactersDict,event=self.individuoFilho.event, genesRecieved=genesCopy)
+                        
+                        
                     
                 novaPopulacao.append(self.individuoFilho)
                 individuos += 1
@@ -181,11 +206,20 @@ class SimpleDemoGA:
                 if individuo.fitness > highestFitness:
                     highestFitness = individuo.fitness
                     bestIndividual = individuo
+                if individuo.fitness > highestFitnessOverall:
+                    highestFitnessOverall = individuo.fitness
+                    bestIndividualOverall = individuo
 
             print("\nGeração %d: \n" %(geracao))
-            print("Fitness da pop: %f \n" %(self.population.fitness))
-            print("Melhor fitness: %f\n" %(highestFitness))
-            #print('Melhor individuo: ', bestIndividual.genes)
+            print("Fitness da pop: %f " %(self.population.fitness))
+           
+            if geracao == 249:
+                print("Melhor fitness: %f\n" %(highestFitness))
+                print('Melhor individuo: ', bestIndividual.genes)
+                print('Melhor fitness overall: ', highestFitnessOverall)
+                print('Melhor individuo overall: ', bestIndividualOverall.genes)
+                #for individual in self.population.individuals:
+                       #print("Individuo é viavel? : %s" %(individual.isViable()))
             geracao += 1
             
         
@@ -208,7 +242,7 @@ class SimpleDemoGA:
     def crossover(self):
         # seleção do ponto de crossover
         
-        pontoCorte = random.randint(1, self.individuoPai.geneLength-1)
+        pontoCorte = 1 #random.randint(1, self.individuoPai.geneLength-1)
 
 
         partePai = self.individuoPai.genes[:pontoCorte].tolist()
@@ -216,16 +250,12 @@ class SimpleDemoGA:
         # criação do filho
         new_genes = partePai + parteMae
         filho = Individual(event = self.population.events, charactersDict = self.population.characters, genesRecieved = np.array(new_genes))
- 
         return filho
     
     def mutation(self):
-       
-        generated_viable_child = False
-        while not generated_viable_child:
-            self.individuoFilho.genes = random.shuffle(self.individuoFilho.genes)
-            generated_viable_child =  self.individuoFilho.isViable()
-        return self.individuoFilho
+        genes = self.individuoFilho.genes
+        random.shuffle(genes) 
+        return genes
     
         # # Select a random mutation point
         # mutationPointGene = random.randint(0, len(self.population.individuals[0].genes) - 1)
