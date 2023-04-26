@@ -1,5 +1,23 @@
 from functions import *
 
+# definições do pygame
+# pygame.init()
+# pygame.font.init()
+
+# display_height = 426+300
+# display_width = 1201
+
+# # fonte para texto
+# font = pygame.font.SysFont("Courier New", 30)
+# smallfont = pygame.font.SysFont("Courier New", 18)
+
+# #pygame.font.match_font('Ringbearer')
+# s_font = pygame.font.Font("assets/RingbearerMedium-51mgZ.ttf", 40)
+
+#game_display = pygame.display.set_mode((display_width,display_height))
+# pygame.display.update()
+
+
 fileData = readFile('caverna_dragao_v2.txt')
 weightMatrix = fileData[0]
 eventsDict = fileData[1]
@@ -67,7 +85,7 @@ ga = SimpleDemoGA()
 
 # ####################################
 # # population_dict => dicinário com chaves numericas. cada chave representa um individuo. O valor de cada chave é um dict da forma {genoma: "string_com_o_genoma", fitness: valor_de_fitness}
-# # a string_com_o_genoma é gerada a partir de cada individuo (simplismente a transformação da lista com 28 sublistas  em uma string contendo a mesma informação)
+# # a string_com_o_genoma é gerada a partir de cada individuo (  simplismente a transformação da lista com 28 sublistas  em uma string contendo a mesma informação)
 
 # population_dict = {}
 # for individuo_index in range(len(population)): #len(population)

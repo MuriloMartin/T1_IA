@@ -2,6 +2,9 @@ import numpy as np
 import time as time
 import random
 import copy
+from email.policy import default
+import pygame
+from pygame.locals import *
 from pprint import pprint
 
 
@@ -115,7 +118,7 @@ class Individual:
 #Population class
 class Population:
     def __init__(self, individualsReceived = []):
-        self.popSize = 1000
+        self.popSize = 1400
         self.fittest = 0
         self.events = readFile('caverna_dragao_v2.txt')[1]
         self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
@@ -157,7 +160,7 @@ class SimpleDemoGA:
 
     def GA(self):
         MaxIndividuos = self.population.popSize
-        MaxGeracoes = 250
+        MaxGeracoes = 200
         geracao = 0
         
         highestFitnessOverall = 0
@@ -204,6 +207,8 @@ class SimpleDemoGA:
                 print('Melhor individuo: ', bestIndividual.genes)
                 print('Melhor fitness overall: ', highestFitnessOverall)
                 print('Melhor individuo overall: ', bestIndividualOverall.genes)
+                print("Custo total do melhor: %f\n"%(10000/highestFitnessOverall))
+
                 #for individual in self.population.individuals:
                        #print("Individuo é viavel? : %s" %(individual.isViable()))
             geracao += 1
