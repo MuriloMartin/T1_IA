@@ -112,7 +112,7 @@ class Individual:
 #Population class   
 class Population:
     def __init__(self, individualsReceived = []):
-        self.popSize = 2000
+        self.popSize = 3000
         self.fittest = 0
         #self.eventsDict = readFile('caverna_dragao_v2.txt')[1]
         self.characters = {0:{'agility':1.5}, 1:{'agility':1.4}, 2:{'agility':1.3}, 3:{'agility':1.2}, 4:{'agility':1.1}, 5:{'agility':1.0}}
@@ -178,7 +178,8 @@ class SimpleDemoGA:
                 novaPopulacao.append(self.individuoFilho)
                 individuos += 1
 
-            
+                if individuos == 1 or individuos == MaxIndividuos*0.25 or individuos == MaxIndividuos*0.5 or individuos == MaxIndividuos*0.75:
+                    print("Progresso da geração %d: %d%%" %(geracao, individuos/MaxIndividuos*100))
             self.population = Population(individualsReceived=novaPopulacao)
             
             highestFitness = 0
@@ -195,7 +196,6 @@ class SimpleDemoGA:
             print("Mais rápido até agora: %f\n"%(10000/highestFitnessOverall))
 
 
-           
             if geracao == (MaxGeracoes-1):
                 print("Melhor fitness: %f\n" %(highestFitness))
                 print('Melhor individuo: ', bestIndividual.genes)
@@ -203,12 +203,11 @@ class SimpleDemoGA:
                 print('Melhor fitness overall: ', highestFitnessOverall)
                 print("Custo total do melhor: %f\n"%(10000/highestFitnessOverall))
 
-                #for individual in self.population.individuals:
-                       #print("Individuo é viavel? : %s" %(individual.isViable()))
+
             geracao += 1
             
         return bestIndividualOverall
-        #return max(PopulacaoAtual, key=individuo.fitness) # retorna o individuo com maior fitness (máximo local)
+
 
     def Roleta(self):
         roleta = []
