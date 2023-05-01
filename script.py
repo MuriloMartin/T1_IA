@@ -1,4 +1,5 @@
-from functions import *
+from search_algorithm import *
+from metaheuristic import *
 
 # definições do pygame
 # pygame.init()
@@ -23,24 +24,24 @@ weightMatrix = fileData[0]
 eventsDict = fileData[1]
 
 
-adjMatrix = createGraph(weightMatrix)
-heuristic = createDistanceMatrix(weightMatrix)
+# adjMatrix = createGraph(weightMatrix)
+# heuristic = createDistanceMatrix(weightMatrix)
 
-totalTime = 0
-for i in range (1,29):
-    goal = eventsDict[i]
-    start = eventsDict[i-1]
-    print('\n\n\ngoal',goal['node'])
-    print('start',start['node'])
-    print('Calculando entre : %s e %s\n' % (start['label'], goal['label']))
-    results = a_star(adjMatrix,heuristic,start['node'],goal['node'])
-    path = results[1]
-    shortest = results[0]
-    totalTime += shortest
-    print('Caminho menos custoso entre : %s e %s : %d \n' % (start['label'], goal['label'], shortest))
-    print('Caminho : ',path)
+# totalTime = 0
+# for i in range (1,29):
+#     goal = eventsDict[i]
+#     start = eventsDict[i-1]
+#     print('\n\n\ngoal',goal['node'])
+#     print('start',start['node'])
+#     print('Calculando entre : %s e %s\n' % (start['label'], goal['label']))
+#     results = a_star(adjMatrix,heuristic,start['node'],goal['node'])
+#     path = results[1]
+#     shortest = results[0]
+#     totalTime += shortest
+#     print('Caminho menos custoso entre : %s e %s : %d \n' % (start['label'], goal['label'], shortest))
+#     print('Caminho : ',path)
 
-print('totalTime : ',totalTime)
+# print('totalTime : ',totalTime)
 
 charactersDict = {
     0:{'agility':1.5}, #Hank
@@ -71,7 +72,7 @@ characters = [{'name':'Hank','agility':'1.5', 'energy_points':11}, {'name':'Dian
 # pop = Population()
 # print("pop: ", pop.individuals)
 
-#ga = SimpleDemoGA()
+ga = SimpleDemoGA()
 
 # Run the genetic algorithm
 
