@@ -313,6 +313,8 @@ def readFile(file):
             nodeCounter+=1
         elif char:
             match char:
+                case "0":
+                    eventsDict[0] = {'node': nodeCounter, 'label': 'Início', 'stage':'0', 'difficulty':0}
                 case "1":
                     eventsDict[1] = {'node': nodeCounter, 'label': 'Helix', 'stage':'1', 'difficulty':10}
                 case "2":
@@ -371,7 +373,7 @@ def readFile(file):
                     eventsDict[28] = {'node': nodeCounter, 'label': 'Abyss', 'stage':'Z', 'difficulty':260}
                 case "_":
                     print('Erro ao determinar o evento')
-            auxArray.append("1")
+            auxArray.append("0.0000001")
             nodeCounter += 1
         if not char:
             break
@@ -412,7 +414,7 @@ def createDistanceMatrix(matrix):
                     distance = abs(currentNode[0]-probedNode[0]) + abs(currentNode[1]-probedNode[1])
                     auxArray.append(distance) 
             heuristic.append(auxArray)
-    #print('Tempo de execução da função createDistanceMatrix: ', time.time()-startTime)
+    print('Tempo de execução da função createDistanceMatrix: ', time.time()-startTime)
     return heuristic
 
 
