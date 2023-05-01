@@ -1,10 +1,32 @@
 import numpy as np
 import time as time
-from email.policy import default
-from pygame.locals import *
+import pygame as pygame
 from pprint import pprint
+from pygame import Color
 
+            
+def draw_observed_area(screen, map_data, tile_size, x, y, darken_factor=0.5):
+    # Get the original color at the (x, y) position
+    character =  map_data[y][x]
+    if character == '.':
+        original_color =  pygame.Color(255, 255, 0)  # Yellow
+    elif character == 'M':
+        original_color =  pygame.Color(139, 69, 19)  # Brown
+    elif character == 'D':
+        original_color =  pygame.Color(255, 0, 0)  # Red
+    elif character == 'R':
+        original_color =  pygame.Color(128, 128, 128)  # Gray
+    elif character == 'F':
+        original_color =  pygame.Color(0, 128, 0)  # Green
+    elif character == 'A':
+        original_color =  pygame.Color(0, 0, 255)  # Blue
+    else:
+        original_color = pygame.Color(255, 255, 255)  # White
 
+    darker_color = Color(int(original_color.r * darken_factor), int(original_color.g * darken_factor), int(original_color.b * darken_factor))
+
+    pygame.draw.rect(screen, darker_color, (x * tile_size, y * tile_size, tile_size, tile_size))
+    pygame.display.update() 
 
 def readFile(file):
     file = open(file, 'r')
@@ -122,7 +144,7 @@ def createGraph(weightMatrix):
     return adjMatrix
 
 def createDistanceMatrix(matrix):
-    startTime = time.time()
+    #startTime = time.time()
     matrixHeight = len(matrix)
     matrixWidht = len(matrix[0])
     heuristic = []
@@ -136,7 +158,7 @@ def createDistanceMatrix(matrix):
                     distance = abs(currentNode[0]-probedNode[0]) + abs(currentNode[1]-probedNode[1])
                     auxArray.append(distance) 
             heuristic.append(auxArray)
-    print('Tempo de execução da função createDistanceMatrix: ', time.time()-startTime)
+    #print('Tempo de execução da função createDistanceMatrix: ', time.time()-startTime)
     return heuristic
 
 def getNeighbours(i,j,matrixHeight,matrixWidht):
@@ -191,7 +213,7 @@ def getNeighbours(i,j,matrixHeight,matrixWidht):
             #print('9cl')
     return neighbours
 
-def a_star(graph, heuristic, start, goal):
+def a_star(graph, heuristic, start, goal, screen, map_data, tile_size, map_width):
     """
     Finds the shortest distance between two nodes using the A-star (A*) algorithm
     :param graph: an adjacency-matrix-representation of the graph where (x,y) is the weight of the edge or 0 if there is no edge.
@@ -259,4 +281,9 @@ def a_star(graph, heuristic, start, goal):
 
         # Lastly, note that we are finished with this node.
         visited[lowest_priority_index] = True
+        # Inside the A* function
+        if start!=7403:
+            x, y = lowest_priority_index % map_width, lowest_priority_index // map_width
+            draw_observed_area(screen, map_data, tile_size, x, y) 
+
 
